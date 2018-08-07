@@ -1,6 +1,7 @@
 package com.caliyeti;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,6 +26,7 @@ public class HelloServletTest {
     }
 
     @Test
+    @Ignore
     public void doGet() throws Exception {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
@@ -37,6 +39,7 @@ public class HelloServletTest {
     }
 
     @Test
+    @Ignore
     public void doPostWithoutName() throws Exception {
         when(request.getRequestDispatcher("response.jsp"))
             .thenReturn(requestDispatcher);
@@ -48,6 +51,7 @@ public class HelloServletTest {
     }
 
 	@Test
+    @Ignore
     public void doPostWithName() throws Exception {
         when(request.getParameter("name")).thenReturn("Dolly");
         when(request.getRequestDispatcher("response.jsp"))
