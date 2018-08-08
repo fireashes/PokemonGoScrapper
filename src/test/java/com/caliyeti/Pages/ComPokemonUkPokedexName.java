@@ -370,11 +370,12 @@ public class ComPokemonUkPokedexName {
                             sleep(500);
                             customSelectMenuFormesNames.get(i).click();
                             sleep(500);
-                            wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
                             wait.until(ExpectedConditions.textToBePresentInElement(currentFormeLabel,formeName));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        // Do Nothing, check next one
                     }
                 }
                 if (formeName.equals(currentFormeLabel.getText().trim())) {
