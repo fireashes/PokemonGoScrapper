@@ -92,7 +92,7 @@ public class HelloServletFunctionalTest {
                     System.out.println(i + "." + formeName + ".Y.Description=" + page.getDesctiption());
                     System.out.println(i + "." + formeName + ".Y.Height=" + page.getHeight());
                     System.out.println(i + "." + formeName + ".Y.Weight=" + page.getWeight());
-                    System.out.println(i + "." + formeName + ".Y.Gender=" + page.getGenders());
+                    System.out.println(i + "." + formeName + ".Y.Genders=" + page.getGenders());
                     System.out.println(i + "." + formeName + ".Y.Category=" + page.getCategory());
                     System.out.println(i + "." + formeName + ".Y.Abilities=" + page.getAbilities());
                     System.out.println(i + "." + formeName + ".Y.Types=" + page.getTypes());

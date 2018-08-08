@@ -370,6 +370,8 @@ public class ComPokemonUkPokedexName {
                             sleep(500);
                             customSelectMenuFormesNames.get(i).click();
                             sleep(500);
+                            wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
+                            wait.until(ExpectedConditions.textToBePresentInElement(currentFormeLabel,formeName));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -466,9 +468,9 @@ public class ComPokemonUkPokedexName {
             gList.add(genders.getText());
         } else {
             for (WebElement gender : genderList) {
-                if (gender.getClass().toString().contains("icon_male_symbol")) {
+                if (gender.getAttribute("class").toString().contains("icon_male_symbol")) {
                     gList.add("Male");
-                } else if (gender.getClass().toString().contains("icon_female_symbol")) {
+                } else if (gender.getAttribute("class").toString().contains("icon_female_symbol")) {
                     gList.add("Female");
                 }
             }
