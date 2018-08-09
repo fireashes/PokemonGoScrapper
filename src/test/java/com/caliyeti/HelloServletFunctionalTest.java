@@ -56,7 +56,7 @@ public class HelloServletFunctionalTest {
     @Test
     public void testPokemonComUkPokedex() {
         int startIndex = 1; //1-806
-        int endIndex = 9;
+        int endIndex = 806;
         for (int i = startIndex; i <= endIndex; i++) {
 
             driver.get("https://www.pokemon.com/uk/pokedex/" + i);
