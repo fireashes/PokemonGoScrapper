@@ -310,9 +310,11 @@ public class PokemonComUkPokedexName {
                     .replace(pokemonName, "")
                     .trim();
         }
-        formesNamesList.add(pokemonName);
+
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
-        if (numberOfDivInForme != 2) {
+        if (numberOfDivInForme == 2) {
+            formesNamesList.add(pokemonName);
+        } else {
             try {
                 wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
                 currentFormeLabel.click();
@@ -321,13 +323,10 @@ public class PokemonComUkPokedexName {
                 sleepMillis(500);
             } catch (Exception e) {
                 fail(e.getMessage());
-                e.printStackTrace();
             }
             for (WebElement customSelectMenuFormesName : customSelectMenuFormesNames) {
                 String thisFormName = customSelectMenuFormesName.getText().trim();
-                if (!thisFormName.equals(pokemonName)) {
-                    formesNamesList.add(customSelectMenuFormesName.getText().trim());
-                }
+                formesNamesList.add(customSelectMenuFormesName.getText().trim());
             }
         }
     }
@@ -389,19 +388,11 @@ public class PokemonComUkPokedexName {
     }
 
     public int getNumberOfVersions() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
         wait.until(ExpectedConditions.visibilityOf(versionX));
         wait.until(ExpectedConditions.visibilityOf(versionY));
-        String myXPath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-                "//div[@class='pokedex-pokemon-details-right']" +
-                "/div[@class='version-labels']" +
-                "/span[contains(@class,'version-label')]" +
-                "/i";
-        List<WebElement> myVersionList = driver.findElements(By.xpath(myXPath));
-        if (myVersionList.size() == versionsList.size()) {
-            return versionsList.size();
-        } else {
-            return 0;
-        }
+        assertEquals(versionsList.size(), 2);
+        return versionsList.size();
     }
 
     public void selectVersionX() {

@@ -11,6 +11,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -55,9 +61,11 @@ public class HelloServletFunctionalTest {
 
     @Test
     public void testPokemonComUkPokedex() {
+        Path path = Paths.get("./src/main/resources/testPokemonComUkPokedex.properties");
         int startIndex = 1; //1-806
         int endIndex = 806;
         for (int i = startIndex; i <= endIndex; i++) {
+            List<String> lines = new ArrayList<>();
 
             driver.get("https://www.pokemon.com/uk/pokedex/" + i);
             try {
@@ -72,45 +80,69 @@ public class HelloServletFunctionalTest {
 
             page.findPokemonNamePokedexFormes();
             String pokemonName = page.getPokemonName();
-            String pokemonPokedex = page.getPokemonPokedex();
+            String pokemonPokedex = page.getPokemonPokedex().replace("#", "");
             List<String> formesNamesList = page.getFormesNameList();
+            assert (Integer.parseInt(pokemonPokedex) == i);
 
-            System.out.println(i + ".PokemonName=" + pokemonName);
-            System.out.println(i + ".PokemonPokedex=" + pokemonPokedex);
-            System.out.println(i + ".PokemonFormes=" + formesNamesList);
-
+            lines.add(pokemonPokedex + ".PokemonName=" + pokemonName);
+            lines.add(pokemonPokedex + ".PokemonPokedex=" + pokemonPokedex);
+            lines.add(pokemonPokedex + ".PokemonFormes=" + formesNamesList);
 
 
             for (String formeName : formesNamesList) {
                 try {
                     page.selectForme(formeName);
                     sleep(500);
-                    System.out.println(i + "." + formeName + ".NumberOfVersions=" + page.getNumberOfVersions());
+                    lines.add(pokemonPokedex + "." + formeName + ".NumberOfVersions=" + page.getNumberOfVersions());
 
                     page.selectVersionY();
                     sleep(500);
-                    System.out.println(i + "." + formeName + ".Y.Description=" + page.getDesctiption());
-                    System.out.println(i + "." + formeName + ".Y.Height=" + page.getHeight());
-                    System.out.println(i + "." + formeName + ".Y.Weight=" + page.getWeight());
-                    System.out.println(i + "." + formeName + ".Y.Genders=" + page.getGenders());
-                    System.out.println(i + "." + formeName + ".Y.Category=" + page.getCategory());
-                    System.out.println(i + "." + formeName + ".Y.Abilities=" + page.getAbilities());
-                    System.out.println(i + "." + formeName + ".Y.Types=" + page.getTypes());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Description=" + page.getDesctiption());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Height=" + page.getHeight());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Weight=" + page.getWeight());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Genders=" + page.getGenders());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Category=" + page.getCategory());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Abilities=" + page.getAbilities());
+                    lines.add(pokemonPokedex + "." + formeName + ".Y.Types=" + page.getTypes());
 
                     page.selectVersionX();
                     sleep(500);
-                    System.out.println(i + "." + formeName + ".X.Description=" + page.getDesctiption());
-                    System.out.println(i + "." + formeName + ".X.Height=" + page.getHeight());
-                    System.out.println(i + "." + formeName + ".X.Weight=" + page.getWeight());
-                    System.out.println(i + "." + formeName + ".X.Gender=" + page.getGenders());
-                    System.out.println(i + "." + formeName + ".X.Category=" + page.getCategory());
-                    System.out.println(i + "." + formeName + ".X.Abilities=" + page.getAbilities());
-                    System.out.println(i + "." + formeName + ".X.Types=" + page.getTypes());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Description=" + page.getDesctiption());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Height=" + page.getHeight());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Weight=" + page.getWeight());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Gender=" + page.getGenders());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Category=" + page.getCategory());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Abilities=" + page.getAbilities());
+                    lines.add(pokemonPokedex + "." + formeName + ".X.Types=" + page.getTypes());
 
                 } catch (Exception e) {
                     fail(e.getMessage());
                 }
             }
+            appendLinesToFile(lines, path);
         }
     }
+
+    public void appendLineToPath(String line, Path path) {
+        List<String> lines = new ArrayList<>();
+        lines.add(line);
+        appendLinesToFile(lines, path);
+    }
+
+    public void appendLinesToFile(List<String> lines, Path path) {
+        try {
+            if (Files.notExists(path) || !Files.isRegularFile(path)) {
+                Files.createFile(path);
+            }
+            for (String line : lines) {
+                System.out.println(line);
+            }
+            Files.write(path, lines, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            for (String line : lines) {
+                System.out.println(line);
+            }
+        }
+    }
+
 }

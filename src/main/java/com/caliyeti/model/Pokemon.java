@@ -7,6 +7,8 @@ public class Pokemon {
 
     public String pokemonName;
     public String pokemonPokedex;
+    public int generation;
+    public String region;
     public List<String> formesList = new ArrayList<>();
     public String forme;
     public List<String> versionsList = new ArrayList<>();
