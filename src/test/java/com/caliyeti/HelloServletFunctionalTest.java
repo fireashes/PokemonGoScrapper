@@ -1,6 +1,6 @@
 package com.caliyeti;
 
-import com.caliyeti.Pages.ComPokemonUkPokedexName;
+import com.caliyeti.Pages.PokemonComUkPokedexName;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static java.lang.Thread.sleep;
 
 public class HelloServletFunctionalTest {
@@ -30,7 +30,7 @@ public class HelloServletFunctionalTest {
         try {
             driver = new ChromeDriver();
         } catch (Exception e) {
-            //
+            fail(e.getMessage());
         }
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
@@ -56,21 +56,21 @@ public class HelloServletFunctionalTest {
     @Test
     public void testPokemonComUkPokedex() {
         int startIndex = 1; //1-806
-        int endIndex = 806;
+        int endIndex = 9;
         for (int i = startIndex; i <= endIndex; i++) {
 
             driver.get("https://www.pokemon.com/uk/pokedex/" + i);
             try {
                 sleep(500);
             } catch (Exception e) {
-                //
+                fail(e.getMessage());
             }
-            ComPokemonUkPokedexName page = new ComPokemonUkPokedexName(driver);
+            PokemonComUkPokedexName page = new PokemonComUkPokedexName(driver);
             if (i == startIndex) {
                 page.dismissCookie();
             }
 
-            page.findFormes();
+            page.findPokemonNamePokedexFormes();
             String pokemonName = page.getPokemonName();
             String pokemonPokedex = page.getPokemonPokedex();
             List<String> formesNamesList = page.getFormesNameList();
@@ -97,7 +97,6 @@ public class HelloServletFunctionalTest {
                     System.out.println(i + "." + formeName + ".Y.Abilities=" + page.getAbilities());
                     System.out.println(i + "." + formeName + ".Y.Types=" + page.getTypes());
 
-
                     page.selectVersionX();
                     sleep(500);
                     System.out.println(i + "." + formeName + ".X.Description=" + page.getDesctiption());
@@ -109,7 +108,7 @@ public class HelloServletFunctionalTest {
                     System.out.println(i + "." + formeName + ".X.Types=" + page.getTypes());
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    fail(e.getMessage());
                 }
             }
         }

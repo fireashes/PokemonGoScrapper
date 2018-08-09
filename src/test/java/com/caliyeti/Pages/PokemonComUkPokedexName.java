@@ -5,7 +5,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
@@ -19,12 +18,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
+import static org.junit.Assert.*;
 
-public class ComPokemonUkPokedexName {
+public class PokemonComUkPokedexName {
     private final WebDriver driver;
     private WebDriverWait wait;
-    private Wait<WebDriver> fluentWait;
+    //    private Wait<WebDriver> fluentWait;
     private Actions actions;
 
     private List<String> formesNamesList = new ArrayList<>();
@@ -32,14 +31,14 @@ public class ComPokemonUkPokedexName {
     private String pokemonPokedex = null;
 
 
-    public ComPokemonUkPokedexName(WebDriver driver) {
+    public PokemonComUkPokedexName(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, 30);
-        fluentWait = new FluentWait<WebDriver>(driver)
-                .ignoring(NoSuchElementException.class);
+//        fluentWait = new FluentWait<WebDriver>(driver)
+//                .ignoring(NoSuchElementException.class);
         actions = new Actions(driver);
         PageFactory.initElements(driver, this);
-//        actions.moveToElement(pokedexPokemonPaginationTitle);
+        actions.moveToElement(pokedexPokemonPaginationTitle);
     }
 
     /*
@@ -275,7 +274,7 @@ public class ComPokemonUkPokedexName {
     public void dismissCookie() {
         try {
             cookieDismisser.click();
-            sleep(500);
+            sleepMillis(500);
         } catch (Exception e) {
             // Do nothing
         }
@@ -296,11 +295,12 @@ public class ComPokemonUkPokedexName {
         if (pokedexPokemonPaginationTitle.isDisplayed()) {
             return pokedexPokemonPaginationTitle.getText();
         } else {
+            fail("Could not get pagination title");
             return null;
         }
     }
 
-    public void findFormes() {
+    public void findPokemonNamePokedexFormes() {
         String pokemonNameFromTitle = getTitle().replace(" | Pokédex", "").trim();
         String pokemonNamePokedexFromPaginationTitle = getPaginationTitle();
 
@@ -316,10 +316,11 @@ public class ComPokemonUkPokedexName {
             try {
                 wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
                 currentFormeLabel.click();
-                sleep(500);
+                sleepMillis(500);
                 wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
-                sleep(500);
+                sleepMillis(500);
             } catch (Exception e) {
+                fail(e.getMessage());
                 e.printStackTrace();
             }
             for (WebElement customSelectMenuFormesName : customSelectMenuFormesNames) {
@@ -343,16 +344,16 @@ public class ComPokemonUkPokedexName {
         return formesNamesList;
     }
 
-    public void selectForme(String formeName) throws Exception {
+    public void selectForme(String formeName) {
         if (pokemonName == null || pokemonPokedex == null || formesNamesList == null || pokemonName.isEmpty() || pokemonPokedex.isEmpty() || formesNamesList.size() == 0) {
-            findFormes();
+            findPokemonNamePokedexFormes();
         }
         pokedexPokemonPaginationTitle.click();
         if (formesNamesList.size() == 1) {
             if (formeName.equals(pokemonName)) {
                 // Do Nothing
             } else {
-                throw new Exception("Forme not found");
+                fail("Forme not found");
             }
         } else {
             if (formeName.equals(currentFormeLabel.getText().trim())) {
@@ -362,17 +363,17 @@ public class ComPokemonUkPokedexName {
                     if (formeName.equals(formesNamesList.get(i))) {
                         try {
                             pokedexPokemonPaginationTitle.click();
-                            sleep(500);
+                            sleepMillis(500);
                             wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
                             currentFormeLabel.click();
-                            sleep(500);
+                            sleepMillis(500);
                             wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
-                            sleep(500);
+                            sleepMillis(500);
                             customSelectMenuFormesNames.get(i).click();
-                            sleep(500);
-                            wait.until(ExpectedConditions.textToBePresentInElement(currentFormeLabel,formeName));
+                            sleepMillis(500);
+                            wait.until(ExpectedConditions.textToBePresentInElement(currentFormeLabel, formeName));
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            fail(e.getMessage());
                         }
                     } else {
                         // Do Nothing, check next one
@@ -381,7 +382,7 @@ public class ComPokemonUkPokedexName {
                 if (formeName.equals(currentFormeLabel.getText().trim())) {
                     // Do Nothing
                 } else {
-                    throw new Exception("Forme not loaded");
+                    fail("Forme not loaded");
                 }
             }
         }
@@ -404,22 +405,22 @@ public class ComPokemonUkPokedexName {
     }
 
     public void selectVersionX() {
-        fluentWait.until(ExpectedConditions.visibilityOf(versionX));
+        wait.until(ExpectedConditions.visibilityOf(versionX));
         versionX.click();
     }
 
     public void selectVersionY() {
-        fluentWait.until(ExpectedConditions.visibilityOf(versionY));
+        wait.until(ExpectedConditions.visibilityOf(versionY));
         versionY.click();
     }
 
     public String getDesctiption() {
-        fluentWait.until(ExpectedConditions.visibilityOf(description));
+        wait.until(ExpectedConditions.visibilityOf(description));
         return description.getText().trim();
     }
 
     public String getTextVersionYActiveDescription() {
-        fluentWait.until(ExpectedConditions.visibilityOf(versionYActiveDescription));
+        wait.until(ExpectedConditions.visibilityOf(versionYActiveDescription));
         if (versionYActiveDescription.isDisplayed()) {
             return versionYActiveDescription.getText().trim();
         } else {
@@ -505,5 +506,13 @@ public class ComPokemonUkPokedexName {
             }
         }
         return typeList;
+    }
+
+    public void sleepMillis(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
     }
 }
