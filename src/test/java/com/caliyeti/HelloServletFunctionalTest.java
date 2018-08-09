@@ -62,7 +62,7 @@ public class HelloServletFunctionalTest {
     @Test
     public void testPokemonComUkPokedex() {
         Path path = Paths.get("./src/main/resources/testPokemonComUkPokedex.properties");
-        int startIndex = 1; //1-806
+        int startIndex = 494; //1-492,494-806
         int endIndex = 806;
         for (int i = startIndex; i <= endIndex; i++) {
             List<String> lines = new ArrayList<>();
