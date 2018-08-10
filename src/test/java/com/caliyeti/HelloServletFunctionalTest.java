@@ -61,13 +61,28 @@ public class HelloServletFunctionalTest {
 
     @Test
     public void testPokemonComUkPokedex() {
-        Path path = Paths.get("./src/main/resources/testPokemonComUkPokedex.properties");
-        int startIndex = 494; //1-492,494-806
-        int endIndex = 806;
+        String location = "us";
+        location = "us";
+        Path path = null;
+        if (location.toLowerCase().equals("us")) {
+            path = Paths.get("./src/main/resources/testPokemonComUsPokedex.properties");
+        } else if (location.toLowerCase().equals("uk")) {
+            path = Paths.get("./src/main/resources/testPokemonComUkPokedex.properties");
+        } else {
+            path = Paths.get("./src/main/resources/testPokemonComUkPokedex.properties");
+        }
+        int startIndex = 493; //1-492,494-806
+        int endIndex = 493;
         for (int i = startIndex; i <= endIndex; i++) {
             List<String> lines = new ArrayList<>();
 
-            driver.get("https://www.pokemon.com/uk/pokedex/" + i);
+            if (location.toLowerCase().equals("us")) {
+                driver.get("https://www.pokemon.com/us/pokedex/" + i);
+            } else if (location.toLowerCase().equals("uk")) {
+                driver.get("https://www.pokemon.com/uk/pokedex/" + i);
+            } else {
+                driver.get("https://www.pokemon.com/uk/pokedex/" + i);
+            }
             try {
                 sleep(500);
             } catch (Exception e) {
