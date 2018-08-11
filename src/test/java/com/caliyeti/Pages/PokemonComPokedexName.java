@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class PokemonComUkPokedexName {
+public class PokemonComPokedexName {
     private final WebDriver driver;
     private WebDriverWait wait;
     //    private Wait<WebDriver> fluentWait;
@@ -35,7 +35,7 @@ public class PokemonComUkPokedexName {
     private HashMap<String, String> pokemonAbilities = new HashMap<>();
 
 
-    public PokemonComUkPokedexName(WebDriver driver) {
+    public PokemonComPokedexName(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, 30);
 //        fluentWait = new FluentWait<WebDriver>(driver)
@@ -329,7 +329,9 @@ public class PokemonComUkPokedexName {
     public String getTitle() {
         return driver.getTitle();
     }
-
+    public String getCurrentUrl(){
+        return driver.getCurrentUrl();
+    }
     public String getPaginationTitle() {
         actions.moveToElement(pokedexPokemonPaginationTitle);
         wait.until(ExpectedConditions.visibilityOf(pokedexPokemonPaginationTitle));
@@ -345,12 +347,12 @@ public class PokemonComUkPokedexName {
         String pokemonNameFromTitle = getTitle().replace(" | Pokédex", "").trim();
         String pokemonNamePokedexFromPaginationTitle = getPaginationTitle();
 
-        if (pokemonNamePokedexFromPaginationTitle.contains(pokemonNameFromTitle)) {
-            pokemonName = pokemonNameFromTitle;
-            pokemonPokedex = pokemonNamePokedexFromPaginationTitle
-                    .replace(pokemonName, "")
-                    .trim();
-        }
+        assertTrue(pokemonNamePokedexFromPaginationTitle.contains(pokemonNameFromTitle));
+        pokemonName = pokemonNameFromTitle;
+        pokemonPokedex = pokemonNamePokedexFromPaginationTitle
+                .replace(pokemonName, "")
+                .trim();
+        assertTrue(driver.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
 
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
         if (numberOfDivInForme == 2) {
@@ -378,6 +380,10 @@ public class PokemonComUkPokedexName {
 
     public String getPokemonPokedex() {
         return pokemonPokedex;
+    }
+
+    public int getPokedex(){
+        return Integer.parseInt(pokemonPokedex.replace("#", ""));
     }
 
     public List<String> getFormesNameList() {
