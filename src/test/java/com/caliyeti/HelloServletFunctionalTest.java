@@ -119,11 +119,10 @@ public class HelloServletFunctionalTest {
                         lines.add(pokemonPokedex + "." + formeName + "." + version + ".Weight=" + page.getWeight());
                         lines.add(pokemonPokedex + "." + formeName + "." + version + ".Genders=" + page.getGenders());
                         lines.add(pokemonPokedex + "." + formeName + "." + version + ".Category=" + page.getCategory());
-                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
                         HashMap pokemonAbilities = page.findAbilities();
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
                         for (Object abilityAbilityDescription : pokemonAbilities.entrySet()) {
                             Map.Entry pair = (Map.Entry) abilityAbilityDescription;
-                            lines.add(pokemonPokedex + "." + formeName + "." + version + ".Abilities=" + pair.getKey());
                             lines.add(pokemonPokedex + "." + formeName + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
                         }
                         lines.add(pokemonPokedex + "." + formeName + "." + version + ".Types=" + page.getTypes());
