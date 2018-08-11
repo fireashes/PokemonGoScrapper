@@ -239,7 +239,7 @@ public class PokemonComTest {
         List<String> lines = new ArrayList<>();
         page.findPokemonNamePokedexFormes();
         String pokemonName = page.getPokemonName();
-        assertTrue(page.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
+        assertTrue(pokemonPokedex + ": url should contain pokemon name", page.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
         List<String> formesNamesList = page.getFormesNameList();
 
         lines.add(pokemonPokedex + ".PokemonName=" + pokemonName);
@@ -269,7 +269,7 @@ public class PokemonComTest {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                fail(e.getMessage());
+                fail(pokemonPokedex + ":" + e.getMessage());
             }
         }
         appendLinesToFile(lines, path);

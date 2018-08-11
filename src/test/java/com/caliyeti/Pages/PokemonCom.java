@@ -329,9 +329,11 @@ public class PokemonCom {
     public String getTitle() {
         return driver.getTitle();
     }
-    public String getCurrentUrl(){
+
+    public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
+
     public String getPaginationTitle() {
         actions.moveToElement(pokedexPokemonPaginationTitle);
         wait.until(ExpectedConditions.visibilityOf(pokedexPokemonPaginationTitle));
@@ -347,12 +349,12 @@ public class PokemonCom {
         String pokemonNameFromTitle = getTitle().replace(" | Pokédex", "").trim();
         String pokemonNamePokedexFromPaginationTitle = getPaginationTitle();
 
-        assertTrue(pokemonNamePokedexFromPaginationTitle.contains(pokemonNameFromTitle));
+        assertTrue("Pokemon name from title " + pokemonNameFromTitle + " should match pokemon name displayed " + pokemonNamePokedexFromPaginationTitle, pokemonNamePokedexFromPaginationTitle.contains(pokemonNameFromTitle));
         pokemonName = pokemonNameFromTitle;
         pokemonPokedex = pokemonNamePokedexFromPaginationTitle
                 .replace(pokemonName, "")
                 .trim();
-        assertTrue(driver.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
+        assertTrue(pokemonPokedex + ": Pokemon name from url should match pokemon name", driver.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
 
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
         if (numberOfDivInForme == 2) {
@@ -382,7 +384,7 @@ public class PokemonCom {
         return pokemonPokedex;
     }
 
-    public int getPokedex(){
+    public int getPokedex() {
         return Integer.parseInt(pokemonPokedex.replace("#", ""));
     }
 
@@ -438,24 +440,25 @@ public class PokemonCom {
         wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
         wait.until(ExpectedConditions.visibilityOf(versionX));
         wait.until(ExpectedConditions.visibilityOf(versionY));
-        assertEquals(versionsList.size(), 2);
+        assertEquals(pokemonPokedex + ": There should be two version X and Y", versionsList.size(), 2);
         return versionsList.size();
     }
-    public List<String> getVersions(){
+
+    public List<String> getVersions() {
         wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
         wait.until(ExpectedConditions.visibilityOf(versionX));
         wait.until(ExpectedConditions.visibilityOf(versionY));
-        assertEquals(versionsList.size(), 2);
+        assertEquals(pokemonPokedex + ": There should be two version X and Y", versionsList.size(), 2);
         List<String> versions = new ArrayList<>();
         versions.add("Y");
         versions.add("X");
         return versions;
     }
 
-    public void selectVersion(String version){
-        if (version.toLowerCase().equals("x")){
+    public void selectVersion(String version) {
+        if (version.toLowerCase().equals("x")) {
             selectVersionX();
-        } else if (version.toLowerCase().equals("y")){
+        } else if (version.toLowerCase().equals("y")) {
             selectVersionY();
         } else {
             fail("Version " + version + " not found.");
@@ -561,7 +564,7 @@ public class PokemonCom {
             sleepMillis(1000);
 
             wait.until(ExpectedConditions.visibilityOf(abilityHeading));
-            assertEquals(abilityName, abilityHeading.getText().trim());
+            assertEquals(pokemonPokedex + ": Ability name should be equal to ability heading", abilityName, abilityHeading.getText().trim());
 
             wait.until(ExpectedConditions.visibilityOf(abilityDescription));
             String abilityInfo = abilityDescription.getText().trim();
@@ -593,7 +596,7 @@ public class PokemonCom {
 //        pokedexPokemonPaginationTitle.click();
 //        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(ability))).click();
         wait.until(ExpectedConditions.visibilityOf(buttonClose));
-        assertEquals(abilityHeading.getText().trim(), ability);
+        assertEquals(pokemonPokedex + ": Ability heading should be equal to ability", abilityHeading.getText().trim(), ability);
         wait.until(ExpectedConditions.visibilityOf(abilityDescription));
         String abilityInfo = abilityDescription.getText().trim();
         buttonClose.click();
