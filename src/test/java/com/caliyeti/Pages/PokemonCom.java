@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class PokemonComPokedexName {
+public class PokemonCom {
     private final WebDriver driver;
     private WebDriverWait wait;
     //    private Wait<WebDriver> fluentWait;
@@ -35,7 +35,7 @@ public class PokemonComPokedexName {
     private HashMap<String, String> pokemonAbilities = new HashMap<>();
 
 
-    public PokemonComPokedexName(WebDriver driver) {
+    public PokemonCom(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, 30);
 //        fluentWait = new FluentWait<WebDriver>(driver)
