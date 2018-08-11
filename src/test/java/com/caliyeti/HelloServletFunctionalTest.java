@@ -17,7 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -71,8 +73,8 @@ public class HelloServletFunctionalTest {
         } else {
             path = Paths.get("./src/main/resources/testPokemonComUkPokedex.properties");
         }
-        int startIndex = 493; //1-492,494-806
-        int endIndex = 493;
+        int startIndex = 1; //1-492,494-806
+        int endIndex = 492;
         for (int i = startIndex; i <= endIndex; i++) {
             List<String> lines = new ArrayList<>();
 
@@ -108,29 +110,26 @@ public class HelloServletFunctionalTest {
                 try {
                     page.selectForme(formeName);
                     sleep(500);
-                    lines.add(pokemonPokedex + "." + formeName + ".NumberOfVersions=" + page.getNumberOfVersions());
-
-                    page.selectVersionY();
-                    sleep(500);
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Description=" + page.getDesctiption());
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Height=" + page.getHeight());
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Weight=" + page.getWeight());
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Genders=" + page.getGenders());
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Category=" + page.getCategory());
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Abilities=" + page.getAbilities());
-                    lines.add(pokemonPokedex + "." + formeName + ".Y.Types=" + page.getTypes());
-
-                    page.selectVersionX();
-                    sleep(500);
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Description=" + page.getDesctiption());
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Height=" + page.getHeight());
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Weight=" + page.getWeight());
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Gender=" + page.getGenders());
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Category=" + page.getCategory());
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Abilities=" + page.getAbilities());
-                    lines.add(pokemonPokedex + "." + formeName + ".X.Types=" + page.getTypes());
-
+                    List<String> versions = page.getVersions();
+                    lines.add(pokemonPokedex + "." + formeName + ".Versions=" + versions);
+                    for (String version : versions) {
+                        page.selectVersion(version);
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Description=" + page.getDesctiption());
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Height=" + page.getHeight());
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Weight=" + page.getWeight());
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Genders=" + page.getGenders());
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Category=" + page.getCategory());
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
+                        HashMap pokemonAbilities = page.findAbilities();
+                        for (Object abilityAbilityDescription : pokemonAbilities.entrySet()) {
+                            Map.Entry pair = (Map.Entry) abilityAbilityDescription;
+                            lines.add(pokemonPokedex + "." + formeName + "." + version + ".Abilities=" + pair.getKey());
+                            lines.add(pokemonPokedex + "." + formeName + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
+                        }
+                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Types=" + page.getTypes());
+                    }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     fail(e.getMessage());
                 }
             }

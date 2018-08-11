@@ -16,7 +16,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -29,6 +32,7 @@ public class PokemonComUkPokedexName {
     private List<String> formesNamesList = new ArrayList<>();
     private String pokemonName = null;
     private String pokemonPokedex = null;
+    private HashMap<String, String> pokemonAbilities = new HashMap<>();
 
 
     public PokemonComUkPokedexName(WebDriver driver) {
@@ -72,7 +76,7 @@ public class PokemonComUkPokedexName {
                     /span[contains(@class,'version-label')][contains(@class,'version-x')][contains(@class,'active')]/i
                 /div[contains(@class,'info')][contains(@class,'match-height-tablet')]
                     /div[contains(@class,'pokemon-ability-info')]
-                    /div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]
+                    /div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]
                         //span[@class='attribute-title'][contains(text(),'Height')]/../span[@class='attribute-value']
                         //span[@class='attribute-title'][contains(text(),'Weight')]/../span[@class='attribute-value']
                         //span[@class='attribute-title'][contains(text(),'Gender')]/../span[@class='attribute-value']
@@ -256,9 +260,46 @@ public class PokemonComUkPokedexName {
                     "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
                     "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
                     "//span[@class='attribute-title'][contains(text(),'Abilities')]" +
-                    "/..//span[@class='attribute-value']")
+                    "/../ul[@class='attribute-list']" +
+                    "/li" +
+                    "/a[@class='moreInfo']" +
+                    "/span[@class='attribute-value']")
     })
     private List<WebElement> abilities;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+                    "//div[@class='pokedex-pokemon-details-right']" +
+                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
+                    "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+                    "//span[@class='attribute-title'][contains(text(),'Abilities')]" +
+                    "/..//span[@class='attribute-value']")
+    })
+    private List<WebElement> abilitiesLinks;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-table')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
+            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
+            "/span[@class='button-close']")
+    private WebElement buttonClose;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-table')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
+            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
+            "/h3")
+    private WebElement abilityHeading;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-table')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
+            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
+            "/p")
+    private WebElement abilityDescription;
 
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
@@ -394,15 +435,37 @@ public class PokemonComUkPokedexName {
         assertEquals(versionsList.size(), 2);
         return versionsList.size();
     }
+    public List<String> getVersions(){
+        wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
+        wait.until(ExpectedConditions.visibilityOf(versionX));
+        wait.until(ExpectedConditions.visibilityOf(versionY));
+        assertEquals(versionsList.size(), 2);
+        List<String> versions = new ArrayList<>();
+        versions.add("Y");
+        versions.add("X");
+        return versions;
+    }
+
+    public void selectVersion(String version){
+        if (version.toLowerCase().equals("x")){
+            selectVersionX();
+        } else if (version.toLowerCase().equals("y")){
+            selectVersionY();
+        } else {
+            fail("Version " + version + " not found.");
+        }
+    }
 
     public void selectVersionX() {
         wait.until(ExpectedConditions.visibilityOf(versionX));
         versionX.click();
+        sleepMillis(500);
     }
 
     public void selectVersionY() {
         wait.until(ExpectedConditions.visibilityOf(versionY));
         versionY.click();
+        sleepMillis(500);
     }
 
     public String getDesctiption() {
@@ -461,9 +524,9 @@ public class PokemonComUkPokedexName {
             gList.add(genders.getText());
         } else {
             for (WebElement gender : genderList) {
-                if (gender.getAttribute("class").toString().contains("icon_male_symbol")) {
+                if (gender.getAttribute("class").contains("icon_male_symbol")) {
                     gList.add("Male");
-                } else if (gender.getAttribute("class").toString().contains("icon_female_symbol")) {
+                } else if (gender.getAttribute("class").contains("icon_female_symbol")) {
                     gList.add("Female");
                 }
             }
@@ -479,14 +542,57 @@ public class PokemonComUkPokedexName {
         }
     }
 
+    public HashMap<String, String> findAbilities() {
+        pokemonAbilities.clear();
+        wait.until(ExpectedConditions.visibilityOfAllElements(abilitiesLinks));
+        for (WebElement ability : abilitiesLinks) {
+            wait.until(ExpectedConditions.visibilityOf(ability));
+            wait.until(ExpectedConditions.elementToBeClickable(ability));
+
+            String abilityName = ability.getText().trim();
+
+            ability.click();
+            sleepMillis(1000);
+
+            wait.until(ExpectedConditions.visibilityOf(abilityHeading));
+            assertEquals(abilityName, abilityHeading.getText().trim());
+
+            wait.until(ExpectedConditions.visibilityOf(abilityDescription));
+            String abilityInfo = abilityDescription.getText().trim();
+
+            pokemonAbilities.put(abilityName, abilityInfo);
+
+            wait.until(ExpectedConditions.visibilityOf(buttonClose));
+            buttonClose.click();
+            sleepMillis(1000);
+        }
+        return pokemonAbilities;
+    }
+
+    public HashMap<String, String> getPokemonAbilities() {
+        return pokemonAbilities;
+    }
+
     public List<String> getAbilities() {
         List<String> abilityList = new ArrayList<>();
-        for (WebElement ability : abilities) {
-            if (ability.isDisplayed()) {
-                abilityList.add(ability.getText());
-            }
+        for (Object o : pokemonAbilities.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            abilityList.add(pair.getKey().toString());
         }
         return abilityList;
+    }
+
+
+    public String getAbilityInfo(String ability) {
+//        pokedexPokemonPaginationTitle.click();
+//        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(ability))).click();
+        wait.until(ExpectedConditions.visibilityOf(buttonClose));
+        assertEquals(abilityHeading.getText().trim(), ability);
+        wait.until(ExpectedConditions.visibilityOf(abilityDescription));
+        String abilityInfo = abilityDescription.getText().trim();
+        buttonClose.click();
+        System.out.println(ability + ".info=" + abilityInfo);
+        return abilityInfo;
     }
 
     public List<String> getTypes() {

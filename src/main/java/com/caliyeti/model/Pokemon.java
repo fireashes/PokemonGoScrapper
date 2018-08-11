@@ -1,6 +1,7 @@
 package com.caliyeti.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Pokemon {
@@ -9,14 +10,15 @@ public class Pokemon {
     public String pokemonPokedex;
     public int generation;
     public String region;
-    public List<String> formesList = new ArrayList<>();
+    public List<String> availableFormes = new ArrayList<>();
     public String forme;
-    public List<String> versionsList = new ArrayList<>();
+    public List<String> availableVersions = new ArrayList<>();
     public String version;
-    public List<String> gendersList = new ArrayList<>();
+    public List<String> availableGenders = new ArrayList<>();
     public String gender;
     public String description;
-    public List<String> TypesList = new ArrayList<>();
+    public List<String> typesList = new ArrayList<>();
+    public HashMap<String, String> types = new HashMap<>();
     public String type1;
     public String type2;
     public double baseHeightM;
