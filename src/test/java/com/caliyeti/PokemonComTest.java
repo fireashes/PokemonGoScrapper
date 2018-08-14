@@ -1,7 +1,7 @@
 package com.caliyeti;
 
-import com.caliyeti.Pages.PokemonCom;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
+import com.caliyeti.pages.PokemonComPage;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -29,7 +30,7 @@ public class PokemonComTest {
 
     @BeforeClass
     public static void setupClass() {
-        ChromeDriverManager.getInstance().setup();
+        WebDriverManager.chromedriver().setup();
     }
 
     @Before
@@ -218,8 +219,49 @@ public class PokemonComTest {
         getPokemonComRange("Us", 801, 806);
     }
 
+    @Test
+    public void testPokemonEvolution() {
+        int startIndex = 1;
+        int endIndex = 806;
+        String location = "Us";
+        Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + startIndex + "-" + endIndex + ".properties");
+        List<String> lines = new ArrayList<>();
+
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                fail("Could not create " + path.toString() + "\n" + e.getMessage());
+            }
+        }
+        for (int index = startIndex; index <= endIndex; index++) {
+            driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
+            try {
+                sleep(1000);
+            } catch (Exception e) {
+                fail(e.getMessage());
+            }
+            PokemonComPage page = new PokemonComPage(driver);
+            if (index == startIndex) {
+                page.dismissCookie();
+            }
+            lines.add(index + "=" + page.findEvolutionClass());
+            appendLinesToFile(lines, path);
+        }
+    }
+
     public void getPokemonComRange(String location, int startIndex, int endIndex) {
-        Path path = Paths.get("./src/main/resources/testPokemonCom" + location + ".properties");
+//        System.out.printf("Starting location = %s\tstartIndex = %d\tendIndex = %d\n", location, startIndex, endIndex);
+        Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + startIndex + "-" + endIndex + ".properties");
+        List<String> lines = new ArrayList<>();
+
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                fail("Could not create " + path.toString() + "\n" + e.getMessage());
+            }
+        }
         for (int index = startIndex; index <= endIndex; index++) {
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
             try {
@@ -227,49 +269,53 @@ public class PokemonComTest {
             } catch (Exception e) {
                 fail(e.getMessage());
             }
-            PokemonCom page = new PokemonCom(driver);
+            PokemonComPage page = new PokemonComPage(driver);
             if (index == startIndex) {
                 page.dismissCookie();
             }
             getPageDetails(path, index, page);
+            appendLinesToFile(lines, path);
         }
     }
 
-    public void getPageDetails(Path path, int pokemonPokedex, PokemonCom page) {
+    public void getPageDetails(Path path, int pokedex, PokemonComPage page) {
         List<String> lines = new ArrayList<>();
         page.findPokemonNamePokedexFormes();
         String pokemonName = page.getPokemonName();
-        assertTrue(pokemonPokedex + ": url should contain pokemon name", page.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
+        String pokedexTxt = page.getPokedexTxt();
+        assertEquals(pokedexTxt + ": pokedex " + pokedex + " should match with pokedexTxt " + pokedexTxt, Integer.parseInt(pokedexTxt), pokedex);
         List<String> formesNamesList = page.getFormesNameList();
 
-        lines.add(pokemonPokedex + ".PokemonName=" + pokemonName);
-        lines.add(pokemonPokedex + ".PokemonPokedex=" + pokemonPokedex);
-        lines.add(pokemonPokedex + ".PokemonFormes=" + formesNamesList);
+        lines.add(pokedexTxt + ".PokemonName=" + pokemonName);
+        lines.add(pokedexTxt + ".PokedexTxt=" + pokedexTxt);
+        lines.add(pokedexTxt + ".PokemonFormes=" + formesNamesList);
 
         for (String formeName : formesNamesList) {
             try {
                 page.selectForme(formeName);
                 sleep(500);
                 List<String> versions = page.getVersions();
-                lines.add(pokemonPokedex + "." + formeName + ".Versions=" + versions);
+                lines.add(pokedexTxt + "." + formeName + ".Versions=" + versions);
                 for (String version : versions) {
                     page.selectVersion(version);
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Description=" + page.getDesctiption());
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Height=" + page.getHeight());
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Weight=" + page.getWeight());
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Genders=" + page.getGenders());
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Category=" + page.getCategory());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Description=" + page.getDesctiption());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Height=" + page.getHeight());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Weight=" + page.getWeight());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Genders=" + page.getGenders());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Category=" + page.getCategory());
                     HashMap pokemonAbilities = page.findAbilities();
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
                     for (Object abilityAbilityDescription : pokemonAbilities.entrySet()) {
                         Map.Entry pair = (Map.Entry) abilityAbilityDescription;
-                        lines.add(pokemonPokedex + "." + formeName + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
+                        lines.add(pokedexTxt + "." + formeName + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
                     }
-                    lines.add(pokemonPokedex + "." + formeName + "." + version + ".Types=" + page.getTypes());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Types=" + page.getTypes());
                 }
+                lines.add(pokedexTxt + ".evolutionClass=" + page.findEvolutionClass());
+
             } catch (Exception e) {
                 e.printStackTrace();
-                fail(pokemonPokedex + ":" + e.getMessage());
+                fail(pokedexTxt + ":" + e.getMessage());
             }
         }
         appendLinesToFile(lines, path);

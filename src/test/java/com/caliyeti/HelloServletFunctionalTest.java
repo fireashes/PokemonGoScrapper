@@ -1,6 +1,9 @@
 package com.caliyeti;
 
 import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.FirefoxDriverManager;
+import io.github.bonigarcia.wdm.OperaDriverManager;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,7 +22,8 @@ public class HelloServletFunctionalTest {
 
     @BeforeClass
     public static void setupClass() {
-        ChromeDriverManager.getInstance().setup();
+        WebDriverManager.chromedriver().setup();
+        WebDriverManager.firefoxdriver().setup();
     }
 
     @Before
@@ -38,10 +42,9 @@ public class HelloServletFunctionalTest {
             driver.quit();
     }
 
-    @Ignore
     @Test
     public void sayHello() throws Exception {
-        driver.get("http://localhost:8080/PokemonGoScrapper");
+        driver.get("http://localhost:8081/PokemonGoScrapper");
 
         driver.findElement(By.id("say-hello-text-input")).sendKeys("Ashes");
         driver.findElement(By.id("say-hello-button")).click();

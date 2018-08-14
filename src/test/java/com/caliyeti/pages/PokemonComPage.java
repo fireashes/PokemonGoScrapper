@@ -1,7 +1,6 @@
-package com.caliyeti.Pages;
+package com.caliyeti.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -9,21 +8,18 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class PokemonCom {
+public class PokemonComPage {
     private final WebDriver driver;
     private WebDriverWait wait;
     //    private Wait<WebDriver> fluentWait;
@@ -31,11 +27,12 @@ public class PokemonCom {
 
     private List<String> formesNamesList = new ArrayList<>();
     private String pokemonName = null;
-    private String pokemonPokedex = null;
+    private String pokedexTxt = null;
+    private int pokedex = 0;
+
     private HashMap<String, String> pokemonAbilities = new HashMap<>();
 
-
-    public PokemonCom(WebDriver driver) {
+    public PokemonComPage(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, 30);
 //        fluentWait = new FluentWait<WebDriver>(driver)
@@ -312,6 +309,46 @@ public class PokemonCom {
     })
     private List<WebElement> types;
 
+
+/*
+one=083 (1)
+two=019 (1>1) (first-last)
+three=001 (1>1>1) (first-middle)(middle-last)
+four=133 (1>8) (1-2)(1-3)(1-4)(1-5)(1-6)(1-7)(1-8)(1-9)
+five=265 (1>2>2) (1-2)(2-3)(1-4)(4-5)
+six=043 (1>1>2) (1-2)(2-3)(2-4)
+seven=079 (1>2) (1-2)(1-3)
+eight=106 (1>3) (1-2)(1-3)(1-4)
+
+    //section[contains(@class,'pokedex-pokemon-evolution')][contains(@class,'evolution-one')]
+        //h2
+        //p
+        //ul[contains(@class,'evolution-profile')]
+            /li[@class='first'][@class='middle'][@class='last']
+                /a
+                    /img
+                    /h3
+                        /span
+                    /ul
+                        /li
+
+                /ul/li
+                    /a
+                        /img
+                        /h3
+                            /span
+                        /ul
+                            /li
+
+
+ */
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]")
+    private WebElement pokedexPokemonEvolution;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')][contains(@class,'evolution-one')]")
+    private WebElement evolutionOne;
+
     public void dismissCookie() {
         try {
             cookieDismisser.click();
@@ -345,17 +382,29 @@ public class PokemonCom {
         }
     }
 
-    public void findPokemonNamePokedexFormes() {
-        String pokemonNameFromTitle = getTitle().replace(" | Pokédex", "").trim();
-        String pokemonNamePokedexFromPaginationTitle = getPaginationTitle();
+    public void findPokemonName() {
+        pokemonName = getTitle()
+                .replace(" | Pokédex", "").trim();
+    }
 
-        assertTrue("Pokemon name from title " + pokemonNameFromTitle + " should match pokemon name displayed " + pokemonNamePokedexFromPaginationTitle, pokemonNamePokedexFromPaginationTitle.contains(pokemonNameFromTitle));
-        pokemonName = pokemonNameFromTitle;
-        pokemonPokedex = pokemonNamePokedexFromPaginationTitle
+    public void findPokemonNamePokedex() {
+        findPokemonName();
+        pokedexTxt = getPaginationTitle()
                 .replace(pokemonName, "")
+                .replace("#", "")
                 .trim();
-        assertTrue(pokemonPokedex + ": Pokemon name from url should match pokemon name", driver.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase()));
+        pokedex = Integer.parseInt(pokedexTxt);
+    }
 
+    public void findPokemonNamePokedexFormes() {
+        findPokemonNamePokedex();
+
+        String pokemonNamePokedexFromPaginationTitle = getPaginationTitle();
+        assertTrue("Pokemon name from title " + pokemonName + " should match pokemon name displayed " + pokemonNamePokedexFromPaginationTitle, pokemonNamePokedexFromPaginationTitle.contains(pokemonName));
+
+        if (!driver.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase())) {
+            System.out.println(pokedexTxt + ": Pokemon name from url " + driver.getCurrentUrl() + " does not contain pokemon name " + pokemonName);
+        }
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
         if (numberOfDivInForme == 2) {
             formesNamesList.add(pokemonName);
@@ -364,14 +413,15 @@ public class PokemonCom {
                 wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
                 currentFormeLabel.click();
                 sleepMillis(500);
-                wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
+                //wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
                 sleepMillis(500);
             } catch (Exception e) {
                 fail(e.getMessage());
             }
+            assertTrue(pokedexTxt + ": Number of forms should be greater than 0", customSelectMenuFormesNames.size() > 0);
             for (WebElement customSelectMenuFormesName : customSelectMenuFormesNames) {
                 String thisFormName = customSelectMenuFormesName.getText().trim();
-                formesNamesList.add(customSelectMenuFormesName.getText().trim());
+                formesNamesList.add(thisFormName);
             }
         }
     }
@@ -380,12 +430,8 @@ public class PokemonCom {
         return pokemonName;
     }
 
-    public String getPokemonPokedex() {
-        return pokemonPokedex;
-    }
-
-    public int getPokedex() {
-        return Integer.parseInt(pokemonPokedex.replace("#", ""));
+    public String getPokedexTxt() {
+        return pokedexTxt;
     }
 
     public List<String> getFormesNameList() {
@@ -393,7 +439,7 @@ public class PokemonCom {
     }
 
     public void selectForme(String formeName) {
-        if (pokemonName == null || pokemonPokedex == null || formesNamesList == null || pokemonName.isEmpty() || pokemonPokedex.isEmpty() || formesNamesList.size() == 0) {
+        if (pokemonName == null || pokedexTxt == null || formesNamesList == null || pokemonName.isEmpty() || pokedexTxt.isEmpty() || formesNamesList.size() == 0) {
             findPokemonNamePokedexFormes();
         }
         pokedexPokemonPaginationTitle.click();
@@ -415,13 +461,14 @@ public class PokemonCom {
                             wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
                             currentFormeLabel.click();
                             sleepMillis(500);
-                            wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
+                            //wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
                             sleepMillis(500);
+
                             customSelectMenuFormesNames.get(i).click();
                             sleepMillis(500);
                             wait.until(ExpectedConditions.textToBePresentInElement(currentFormeLabel, formeName));
                         } catch (Exception e) {
-                            fail(e.getMessage());
+                            fail(pokedex + ":" + pokemonName + ":" + e.getMessage());
                         }
                     } else {
                         // Do Nothing, check next one
@@ -436,19 +483,11 @@ public class PokemonCom {
         }
     }
 
-    public int getNumberOfVersions() {
-        wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
-        wait.until(ExpectedConditions.visibilityOf(versionX));
-        wait.until(ExpectedConditions.visibilityOf(versionY));
-        assertEquals(pokemonPokedex + ": There should be two version X and Y", versionsList.size(), 2);
-        return versionsList.size();
-    }
-
     public List<String> getVersions() {
         wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
         wait.until(ExpectedConditions.visibilityOf(versionX));
         wait.until(ExpectedConditions.visibilityOf(versionY));
-        assertEquals(pokemonPokedex + ": There should be two version X and Y", versionsList.size(), 2);
+        assertEquals(pokedexTxt + ": There should be two version X and Y", versionsList.size(), 2);
         List<String> versions = new ArrayList<>();
         versions.add("Y");
         versions.add("X");
@@ -564,7 +603,7 @@ public class PokemonCom {
             sleepMillis(1000);
 
             wait.until(ExpectedConditions.visibilityOf(abilityHeading));
-            assertEquals(pokemonPokedex + ": Ability name should be equal to ability heading", abilityName, abilityHeading.getText().trim());
+            assertEquals(pokedexTxt + ": Ability name should be equal to ability heading", abilityName, abilityHeading.getText().trim());
 
             wait.until(ExpectedConditions.visibilityOf(abilityDescription));
             String abilityInfo = abilityDescription.getText().trim();
@@ -596,7 +635,7 @@ public class PokemonCom {
 //        pokedexPokemonPaginationTitle.click();
 //        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(ability))).click();
         wait.until(ExpectedConditions.visibilityOf(buttonClose));
-        assertEquals(pokemonPokedex + ": Ability heading should be equal to ability", abilityHeading.getText().trim(), ability);
+        assertEquals(pokedexTxt + ": Ability heading should be equal to ability", abilityHeading.getText().trim(), ability);
         wait.until(ExpectedConditions.visibilityOf(abilityDescription));
         String abilityInfo = abilityDescription.getText().trim();
         buttonClose.click();
@@ -612,6 +651,14 @@ public class PokemonCom {
             }
         }
         return typeList;
+    }
+
+    public String findEvolutionClass() {
+        wait.until(ExpectedConditions.visibilityOf(pokedexPokemonEvolution));
+        return pokedexPokemonEvolution
+                .getAttribute("class")
+                .replace("section pokedex-pokemon-evolution", "")
+                .trim();
     }
 
     public void sleepMillis(int millis) {

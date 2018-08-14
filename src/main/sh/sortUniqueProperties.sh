@@ -20,5 +20,5 @@ if [[ -z "${1}" ]]; then
 else
     fileName="${1}"
 fi
-sort -u "${fileName}" | tee temp.txt
+sort -u "${fileName}" 2>/dev/null 1> temp.txt
 mv temp.txt "${fileName}"

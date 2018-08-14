@@ -7,48 +7,78 @@ import java.util.List;
 public class Pokemon {
 
     public String pokemonName;
-    public String pokemonPokedex;
+    public String pokemonNameFromUrl;
+    public String pokedexPound;
+    public String pokedexTxt;
+    public int pokedex;
+
     public int generation;
     public String region;
+
     public List<String> availableFormes = new ArrayList<>();
     public String forme;
+
     public List<String> availableVersions = new ArrayList<>();
     public String version;
+
     public List<String> availableGenders = new ArrayList<>();
     public String gender;
+
     public String description;
-    public List<String> typesList = new ArrayList<>();
-    public HashMap<String, String> types = new HashMap<>();
-    public String type1;
-    public String type2;
-    public double baseHeightM;
-    public double baseHeightIn;
-    public String baseHeightFtIn;
-    public double baseWeightKg;
-    public double baseWeightLbs;
-    public List<String> categoriesList = new ArrayList<>();
+
+    public HashMap<Type, Type> types = new HashMap<>();
+    public Type type1;
+    public Type type2;
+
+    public double heightBaseM;
+    public double heightBaseIn;
+    public String heightBaseFtIn;
+    public double weightBaseKg;
+    public double weightBaseLbs;
+
+    public double heightM;
+    public double weightKg;
+    public String heightDescription;
+    public String weightDescription;
+
     public String category;
-    public List<String> abilitiesList = new ArrayList<>();
-    public String ability;
+    public List<String> availableAbilities = new ArrayList<>();
+    public List<String> abilities = new ArrayList<>();
 
-    public List<String> evolutionBranchesList = new ArrayList<>();
-    public String evolutionBranch;
+    public int familyCandyPokedex;
+    public EvolutionBranch evolutionBranch;
+    public List<EvolutionBranch> allEvolutionBranches = new ArrayList<>();
+    public List<EvolutionBranch> availableEvolutionBranches = new ArrayList<>();
+    public List<EvolutionBranch> evolvedBranches;
 
-    public int baseStamina;
-    public int baseHP;
-    public int baseDefense;
-    public int baseSpecialAttack;
-    public int baseSpecialDefense;
-    public int baseSpeed;
-    public int baseStaminaPG;
-    public int baseHPPG;
-    public int baseAttackPG;
-    public int baseDefensePG;
-    public int baseAttackPGOld;
-    public int baseDefensePGOld;
-    public int speedModifier;
-    public int scaledAttack;
-    public int scaledDefense;
+    public int staminaBase;
+    public int hpBase;
+    public int attackBase;
+    public int defenseBase;
+    public int specialAttackBase;
+    public int specialDefenseBase;
+    public int speedBase;
+
+    public int staminaBasePG;
+    public int hpBasePG;
+    public int attackBasePG;
+    public int defenseBasePG;
+
+    public int staminaIV;
+    public int hpIV;
+    public int attackIV;
+    public int defenseIV;
+    public List<IvCombination> ivCombinations = new ArrayList<>();
+
+    public int stamina;
+    public int attack;
+    public int defense;
+
+    public int attackOldBasePG;
+    public int defenseOldBasePG;
+    public int speedModifierBasePG;
+    public int scaledAttackBasePG;
+    public int scaledDefenseBasePG;
 
     public double baseCaptureRate;
     public double baseFleeRate;
@@ -56,27 +86,25 @@ public class Pokemon {
     public double femaleRatio;
     public double genderlessRatio;
     public double rarity;
-
-    public String evolutionFamilyCandyName;
     public int buddyCandyDistanceKm;
     public int eggHatchDistanceKm;
 
-    public List<String> fastAttacksList = new ArrayList<>();
-    public String fastAttack;
-    public List<String> chargedAttacksList = new ArrayList<>();
-    public String chargedAttack;
+    public List<FastAttack> availableFastAttacks = new ArrayList<>();
+    public String fastAttackName;
+    public List<ChargedAttack> availableChargedAttacks = new ArrayList<>();
+    public String chargedAttackName;
+    public List<AttackMoveCombination> availableAttackMoveCombination;
+    public AttackMoveCombination attackMoveCombination;
 
-    public int currentCP;
-    public int currentHp;
-    public int currentWeightKg;
-    public String currentWeightDescription;
-    public int currentHeightM;
-    public String currentHeightDescription;
-    public int currentPowerUpStardustCost;
-    public int currentPowerUpCandyCost;
-    public List<String> currentEvolutionBranches;
-    public int pastEvolutionBranch;
-    public int currentEvolutionCandyCost;
+    public double level;
+    public int CP;
+    public int Hp;
+    public int powerUpStardustCost;
+    public int powerUpCandyCost;
+
+    public int cpAtLevel40;
+    public int hpAtLevel40;
+    public int cpAtLevel40atFullIV;
 
     public String acquiredBy;
     public String acquiredLocation;

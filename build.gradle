@@ -19,21 +19,22 @@ repositories {
 
 mainClassName = 'com.caliyeti.PokemonGoScrapperApp'
 
-//gretty {
-//    integrationTestTask = 'test'
-//}
+gretty {
+    httpPort = 8081
+    integrationTestTask = 'test'
+}
 
 dependencies {
-	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
 
-    compile 'com.google.guava:guava:23.0'
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'org.slf4j:slf4j-simple:1.7.25'
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.7.19'
-	testCompile 'io.github.bonigarcia:webdrivermanager:1.6.1'
-    testCompile 'org.seleniumhq.selenium:selenium-java:3.3.1'
-    testCompile 'org.slf4j:slf4j-api:1.7.25'
-    testCompile 'org.slf4j:slf4j-simple:1.7.25'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.21.0'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:2.2.4'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:3.14.0'
+    testImplementation 'org.slf4j:slf4j-api:1.7.25'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.25'
 }

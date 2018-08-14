@@ -1,6 +1,5 @@
-package com.caliyeti.Pages;
+package com.caliyeti.pages;
 
-import com.caliyeti.model.Pokemon;
 import org.openqa.selenium.WebDriver;
 
 public class RankedBoostCom extends PokemonPage{
