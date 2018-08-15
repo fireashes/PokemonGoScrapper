@@ -8,6 +8,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,10 +29,12 @@ import static org.junit.Assert.fail;
 
 public class PokemonComTest {
     private WebDriver driver;
+    private final Logger log = LoggerFactory.getLogger(PokemonComTest.class);
 
     @BeforeClass
     public static void setupClass() {
         WebDriverManager.chromedriver().setup();
+
     }
 
     @Before
@@ -50,172 +54,162 @@ public class PokemonComTest {
     }
 
     @Test
-    public void testPokemonComUkPokedexI_1_100() {
+    public void testPokemonComUkPokedexGenI_1_100() {
         getPokemonComRange("Uk", 1, 100);
     }
 
     @Test
-    public void testPokemonComUkPokedexI_101_151() {
+    public void testPokemonComUkPokedexGenI_101_151() {
         getPokemonComRange("Uk", 101, 151);
     }
 
     @Test
-    public void testPokemonComUkPokedexII_152_200() {
+    public void testPokemonComUkPokedexGenII_152_200() {
         getPokemonComRange("Uk", 152, 200);
     }
 
     @Test
-    public void testPokemonComUkPokedexII_201_251() {
+    public void testPokemonComUkPokedexGenII_201_251() {
         getPokemonComRange("Uk", 201, 251);
     }
 
     @Test
-    public void testPokemonComUkPokedexIII_252_300() {
+    public void testPokemonComUkPokedexGenIII_252_300() {
         getPokemonComRange("Uk", 252, 300);
     }
 
     @Test
-    public void testPokemonComUkPokedexIII_301_386() {
+    public void testPokemonComUkPokedexGenIII_301_386() {
         getPokemonComRange("Uk", 301, 386);
     }
 
     @Test
-    public void testPokemonComUkPokedexIV_387_400() {
+    public void testPokemonComUkPokedexGenIV_387_400() {
         getPokemonComRange("Uk", 387, 400);
     }
 
     @Test
-    public void testPokemonComUkPokedexIV_401_487() {
+    public void testPokemonComUkPokedexGenIV_401_492() {
         getPokemonComRange("Uk", 401, 487);
     }
 
     @Test
-    public void testPokemonComUkPokedexIV_488_492() {
-        getPokemonComRange("Uk", 488, 492);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexIV_493_493() {
+    public void testPokemonComUkPokedexGenIV_493_493() {
         getPokemonComRange("Uk", 493, 493);
     }
 
     @Test
-    public void testPokemonComUkPokedexV_494_500() {
+    public void testPokemonComUkPokedexGenV_494_500() {
         getPokemonComRange("Uk", 494, 500);
     }
 
     @Test
-    public void testPokemonComUkPokedexV_501_600() {
+    public void testPokemonComUkPokedexGenV_501_600() {
         getPokemonComRange("Uk", 501, 600);
     }
 
     @Test
-    public void testPokemonComUkPokedexV_601_649() {
+    public void testPokemonComUkPokedexGenV_601_649() {
         getPokemonComRange("Uk", 601, 649);
     }
 
     @Test
-    public void testPokemonComUkPokedexVI_650_700() {
+    public void testPokemonComUkPokedexGenVI_650_700() {
         getPokemonComRange("Uk", 650, 700);
     }
 
     @Test
-    public void testPokemonComUkPokedexVI_701_721() {
+    public void testPokemonComUkPokedexGenVI_701_721() {
         getPokemonComRange("Uk", 701, 721);
     }
 
     @Test
-    public void testPokemonComUkPokedexVII_722_800() {
+    public void testPokemonComUkPokedexGenVII_722_800() {
         getPokemonComRange("Uk", 722, 800);
     }
 
     @Test
-    public void testPokemonComUkPokedexVII_801_806() {
+    public void testPokemonComUkPokedexGenVII_801_806() {
         getPokemonComRange("Uk", 801, 806);
     }
 
     @Test
-    public void testPokemonComUsPokedexI_1_100() {
+    public void testPokemonComUsPokedexGenI_1_100() {
         getPokemonComRange("Us", 1, 100);
     }
 
     @Test
-    public void testPokemonComUsPokedexI_101_151() {
+    public void testPokemonComUsPokedexGenI_101_151() {
         getPokemonComRange("Us", 101, 151);
     }
 
     @Test
-    public void testPokemonComUsPokedexII_152_200() {
+    public void testPokemonComUsPokedexGenII_152_200() {
         getPokemonComRange("Us", 152, 200);
     }
 
     @Test
-    public void testPokemonComUsPokedexII_201_251() {
+    public void testPokemonComUsPokedexGenII_201_251() {
         getPokemonComRange("Us", 201, 251);
     }
 
     @Test
-    public void testPokemonComUsPokedexIII_252_300() {
+    public void testPokemonComUsPokedexGenIII_252_300() {
         getPokemonComRange("Us", 252, 300);
     }
 
     @Test
-    public void testPokemonComUsPokedexIII_301_386() {
+    public void testPokemonComUsPokedexGenIII_301_386() {
         getPokemonComRange("Us", 301, 386);
     }
 
     @Test
-    public void testPokemonComUsPokedexIV_387_400() {
+    public void testPokemonComUsPokedexGenIV_387_400() {
         getPokemonComRange("Us", 387, 400);
     }
 
     @Test
-    public void testPokemonComUsPokedexIV_401_487() {
+    public void testPokemonComUsPokedexGenIV_401_492() {
         getPokemonComRange("Us", 401, 487);
     }
 
     @Test
-    public void testPokemonComUsPokedexIV_488_492() {
-        getPokemonComRange("Us", 488, 492);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexIV_493_493() {
+    public void testPokemonComUsPokedexGenIV_493_493() {
         getPokemonComRange("Us", 493, 493);
     }
 
     @Test
-    public void testPokemonComUsPokedexV_494_500() {
+    public void testPokemonComUsPokedexGenV_494_500() {
         getPokemonComRange("Us", 494, 500);
     }
 
     @Test
-    public void testPokemonComUsPokedexV_501_600() {
+    public void testPokemonComUsPokedexGenV_501_600() {
         getPokemonComRange("Us", 501, 600);
     }
 
     @Test
-    public void testPokemonComUsPokedexV_601_649() {
+    public void testPokemonComUsPokedexGenV_601_649() {
         getPokemonComRange("Us", 601, 649);
     }
 
     @Test
-    public void testPokemonComUsPokedexVI_650_700() {
+    public void testPokemonComUsPokedexGenVI_650_700() {
         getPokemonComRange("Us", 650, 700);
     }
 
     @Test
-    public void testPokemonComUsPokedexVI_701_721() {
+    public void testPokemonComUsPokedexGenVI_701_721() {
         getPokemonComRange("Us", 701, 721);
     }
 
     @Test
-    public void testPokemonComUsPokedexVII_722_800() {
+    public void testPokemonComUsPokedexGenVII_722_800() {
         getPokemonComRange("Us", 722, 800);
     }
 
     @Test
-    public void testPokemonComUsPokedexVII_801_806() {
+    public void testPokemonComUsPokedexGenVII_801_806() {
         getPokemonComRange("Us", 801, 806);
     }
 
@@ -227,13 +221,7 @@ public class PokemonComTest {
         Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + startIndex + "-" + endIndex + ".properties");
         List<String> lines = new ArrayList<>();
 
-        if (!Files.exists(path)) {
-            try {
-                Files.createFile(path);
-            } catch (IOException e) {
-                fail("Could not create " + path.toString() + "\n" + e.getMessage());
-            }
-        }
+        log.debug("startIndex = %d; endIndex = %d; location = %s; path = %s", startIndex, endIndex, location, path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
             try {
@@ -251,18 +239,11 @@ public class PokemonComTest {
     }
 
     public void getPokemonComRange(String location, int startIndex, int endIndex) {
-//        System.out.printf("Starting location = %s\tstartIndex = %d\tendIndex = %d\n", location, startIndex, endIndex);
         Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + startIndex + "-" + endIndex + ".properties");
-        List<String> lines = new ArrayList<>();
 
-        if (!Files.exists(path)) {
-            try {
-                Files.createFile(path);
-            } catch (IOException e) {
-                fail("Could not create " + path.toString() + "\n" + e.getMessage());
-            }
-        }
+        log.info("startIndex = %d; endIndex = %d; location = %s; path = %s", startIndex, endIndex, location, path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
+            log.info("index = %d", index);
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
             try {
                 sleep(500);
@@ -274,27 +255,31 @@ public class PokemonComTest {
                 page.dismissCookie();
             }
             getPageDetails(path, index, page);
-            appendLinesToFile(lines, path);
         }
     }
 
     public void getPageDetails(Path path, int pokedex, PokemonComPage page) {
         List<String> lines = new ArrayList<>();
         page.findPokemonNamePokedexFormes();
-        String pokemonName = page.getPokemonName();
-        String pokedexTxt = page.getPokedexTxt();
-        assertEquals(pokedexTxt + ": pokedex " + pokedex + " should match with pokedexTxt " + pokedexTxt, Integer.parseInt(pokedexTxt), pokedex);
+
+
+        String pokedexTxt = String.format("%03d", pokedex);
+
+        assertEquals(pokedexTxt + ": pokedex " + pokedex + " should be equal to pokedex displayed in the page " + page.getPokedex(), pokedex, page.getPokedex());
+        assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " should be equal to pokedexTxt displayed in the page " + page.getPokedexTxt(), pokedexTxt, page.getPokedexTxt());
+
         List<String> formesNamesList = page.getFormesNameList();
 
-        lines.add(pokedexTxt + ".PokemonName=" + pokemonName);
-        lines.add(pokedexTxt + ".PokedexTxt=" + pokedexTxt);
-        lines.add(pokedexTxt + ".PokemonFormes=" + formesNamesList);
+        lines.add(pokedexTxt + ".PokemonName=" + page.getPokemonName());
+        lines.add(pokedexTxt + ".pokedex=" + page.getPokedex());
+        lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
+        lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
 
         for (String formeName : formesNamesList) {
             try {
                 page.selectForme(formeName);
                 sleep(500);
-                List<String> versions = page.getVersions();
+                List<String> versions = page.findVersions();
                 lines.add(pokedexTxt + "." + formeName + ".Versions=" + versions);
                 for (String version : versions) {
                     page.selectVersion(version);
@@ -312,9 +297,7 @@ public class PokemonComTest {
                     lines.add(pokedexTxt + "." + formeName + "." + version + ".Types=" + page.getTypes());
                 }
                 lines.add(pokedexTxt + ".evolutionClass=" + page.findEvolutionClass());
-
             } catch (Exception e) {
-                e.printStackTrace();
                 fail(pokedexTxt + ":" + e.getMessage());
             }
         }
@@ -326,14 +309,12 @@ public class PokemonComTest {
             if (Files.notExists(path) || !Files.isRegularFile(path)) {
                 Files.createFile(path);
             }
-            for (String line : lines) {
-                System.out.println(line);
-            }
             Files.write(path, lines, StandardOpenOption.APPEND);
         } catch (IOException e) {
-            for (String line : lines) {
-                System.out.println(line);
-            }
+            System.out.println("Could not add lines to the file " + path.toString());
+        }
+        for (String line : lines) {
+            System.out.println(line);
         }
     }
 

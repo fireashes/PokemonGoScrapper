@@ -8,4 +8,10 @@ public class IvCombination {
     public int attackIV;
     public int defenseIV;
     public boolean isDiscarded = false;
+
+    public IvCombination(int staminaIV, int attackIV, int defenseIV) {
+        this.staminaIV = staminaIV;
+        this.attackIV = attackIV;
+        this.defenseIV = defenseIV;
+    }
 }

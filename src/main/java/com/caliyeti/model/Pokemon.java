@@ -7,7 +7,7 @@ import java.util.List;
 public class Pokemon {
 
     public String pokemonName;
-    public String pokemonNameFromUrl;
+    public String pokemonNameSimple;
     public String pokedexPound;
     public String pokedexTxt;
     public int pokedex;
@@ -42,8 +42,8 @@ public class Pokemon {
     public String weightDescription;
 
     public String category;
-    public List<String> availableAbilities = new ArrayList<>();
-    public List<String> abilities = new ArrayList<>();
+    public List<Ability> availableAbilities = new ArrayList<>();
+    public List<Ability> abilities = new ArrayList<>();
 
     public int familyCandyPokedex;
     public EvolutionBranch evolutionBranch;
@@ -86,6 +86,8 @@ public class Pokemon {
     public double femaleRatio;
     public double genderlessRatio;
     public double rarity;
+    public String legendry;
+
     public int buddyCandyDistanceKm;
     public int eggHatchDistanceKm;
 
@@ -97,14 +99,28 @@ public class Pokemon {
     public AttackMoveCombination attackMoveCombination;
 
     public double level;
-    public int CP;
-    public int Hp;
+    public int cp;
+    public int hp;
     public int powerUpStardustCost;
     public int powerUpCandyCost;
 
+    public int cpAtLevel15;
+    public int cpAtLevel20;
+    public int cpAtLevel25;
+    public int cpAtLevel30;
+    public int cpAtLevel35;
     public int cpAtLevel40;
+    public int cpAtMaxLevelFor0IV;
+    public int cpAtMaxLevelForFullIV;
+
+    public int hpAtLevel15;
+    public int hpAtLevel20;
+    public int hpAtLevel25;
+    public int hpAtLevel30;
+    public int hpAtLevel35;
     public int hpAtLevel40;
-    public int cpAtLevel40atFullIV;
+    public int hpAtMaxLevelFor0IV;
+    public int hpAtMaxLevelForFullIV;
 
     public String acquiredBy;
     public String acquiredLocation;
@@ -120,4 +136,7 @@ public class Pokemon {
     public Pokemon() {
     }
 
+    public Pokemon(int pokedex) {
+        this.pokedex = pokedex;
+    }
 }

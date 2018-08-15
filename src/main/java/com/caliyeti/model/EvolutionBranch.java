@@ -9,4 +9,7 @@ public class EvolutionBranch {
     public int evolutionFromPokedex;
     public String evolutionToPokemonName;
     public String evolutionToPokedex;
+
+    public EvolutionBranch() {
+    }
 }

@@ -27,6 +27,7 @@ public class PokemonComPage {
 
     private List<String> formesNamesList = new ArrayList<>();
     private String pokemonName = null;
+    private String pokemonNameSimple = null;
     private String pokedexTxt = null;
     private int pokedex = 0;
 
@@ -371,40 +372,32 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
         return driver.getCurrentUrl();
     }
 
-    public String getPaginationTitle() {
-        actions.moveToElement(pokedexPokemonPaginationTitle);
-        wait.until(ExpectedConditions.visibilityOf(pokedexPokemonPaginationTitle));
-        if (pokedexPokemonPaginationTitle.isDisplayed()) {
-            return pokedexPokemonPaginationTitle.getText();
-        } else {
-            fail("Could not get pagination title");
-            return null;
-        }
-    }
-
-    public void findPokemonName() {
-        pokemonName = getTitle()
-                .replace(" | Pokédex", "").trim();
-    }
-
     public void findPokemonNamePokedex() {
-        findPokemonName();
-        pokedexTxt = getPaginationTitle()
-                .replace(pokemonName, "")
-                .replace("#", "")
+        pokemonName = getTitle()
+                .replace(" | Pokédex", "")
+                .trim();
+        String pokedexPokemonPaginationTitleTxt = wait.until(ExpectedConditions.visibilityOf(pokedexPokemonPaginationTitle))
+                .getText()
+                .trim();
+        String pokemonNameDisplayed = pokedexPokemonPaginationTitleTxt
+                .replaceAll("#.*", "")
+                .trim();
+        assertTrue("Pokemon name from page tile " + pokemonName + " should be same with pokemon name displayed " + pokemonNameDisplayed, pokemonName.equals(pokemonNameDisplayed));
+        pokedexTxt = pokedexPokemonPaginationTitleTxt
+                .replaceAll(".*#", "")
                 .trim();
         pokedex = Integer.parseInt(pokedexTxt);
+        pokemonNameSimple = driver.getCurrentUrl()
+                .replaceAll(".*/", "")
+                .trim();
+        if (!pokemonName.toLowerCase().equals(pokemonNameSimple.toLowerCase())) {
+            System.out.println(pokedexTxt + ": Pokemon name " + pokemonName + " does not match with simple pokemon name " + pokemonNameSimple);
+        }
     }
 
     public void findPokemonNamePokedexFormes() {
         findPokemonNamePokedex();
 
-        String pokemonNamePokedexFromPaginationTitle = getPaginationTitle();
-        assertTrue("Pokemon name from title " + pokemonName + " should match pokemon name displayed " + pokemonNamePokedexFromPaginationTitle, pokemonNamePokedexFromPaginationTitle.contains(pokemonName));
-
-        if (!driver.getCurrentUrl().toLowerCase().contains(pokemonName.toLowerCase())) {
-            System.out.println(pokedexTxt + ": Pokemon name from url " + driver.getCurrentUrl() + " does not contain pokemon name " + pokemonName);
-        }
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
         if (numberOfDivInForme == 2) {
             formesNamesList.add(pokemonName);
@@ -432,6 +425,14 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
 
     public String getPokedexTxt() {
         return pokedexTxt;
+    }
+
+    public String getPokemonNameSimple() {
+        return pokemonNameSimple;
+    }
+
+    public int getPokedex() {
+        return pokedex;
     }
 
     public List<String> getFormesNameList() {
@@ -483,7 +484,7 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
         }
     }
 
-    public List<String> getVersions() {
+    public List<String> findVersions() {
         wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
         wait.until(ExpectedConditions.visibilityOf(versionX));
         wait.until(ExpectedConditions.visibilityOf(versionY));

@@ -11,6 +11,7 @@ plugins {
     id 'application'
     id 'war'
     id "org.gretty" version "2.2.0"
+    id "jacoco"
 }
 
 repositories {
@@ -23,9 +24,14 @@ gretty {
     httpPort = 8081
     integrationTestTask = 'test'
 }
+jacoco {
+    toolVersion = "0.8.1"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
 
 dependencies {
-	compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
+//	compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.slf4j:slf4j-api:1.7.25'
