@@ -271,6 +271,7 @@ public class PokemonComTest {
         List<String> formesNamesList = page.getFormesNameList();
 
         lines.add(pokedexTxt + ".PokemonName=" + page.getPokemonName());
+        lines.add(pokedexTxt + ".PokemonNameSimple=" + page.getPokemonNameSimple());
         lines.add(pokedexTxt + ".pokedex=" + page.getPokedex());
         lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
         lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
@@ -296,11 +297,11 @@ public class PokemonComTest {
                     }
                     lines.add(pokedexTxt + "." + formeName + "." + version + ".Types=" + page.getTypes());
                 }
-                lines.add(pokedexTxt + ".evolutionClass=" + page.findEvolutionClass());
             } catch (Exception e) {
                 fail(pokedexTxt + ":" + e.getMessage());
             }
         }
+        lines.add(pokedexTxt + ".EvolutionClass=" + page.findEvolutionClass());
         appendLinesToFile(lines, path);
     }
 
@@ -317,5 +318,4 @@ public class PokemonComTest {
             System.out.println(line);
         }
     }
-
 }
