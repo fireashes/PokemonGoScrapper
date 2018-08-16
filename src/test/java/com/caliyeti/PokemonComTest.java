@@ -272,7 +272,7 @@ public class PokemonComTest {
 
         lines.add(pokedexTxt + ".PokemonName=" + page.getPokemonName());
         lines.add(pokedexTxt + ".PokemonNameSimple=" + page.getPokemonNameSimple());
-        lines.add(pokedexTxt + ".pokedex=" + page.getPokedex());
+        lines.add(pokedexTxt + ".Pokedex=" + page.getPokedex());
         lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
         lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
 
