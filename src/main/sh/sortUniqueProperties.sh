@@ -22,3 +22,5 @@ else
 fi
 sort -u "${fileName}" 2>/dev/null 1> temp.txt
 mv temp.txt "${fileName}"
+
+#for f in src/main/resources/*.properties; do src/main/sh/sortUniqueProperties.sh $f; done

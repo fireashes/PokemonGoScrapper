@@ -88,6 +88,7 @@ public class Pokemon {
     public double rarity;
     public String legendry;
 
+    public String buddySize;
     public int buddyCandyDistanceKm;
     public int eggHatchDistanceKm;
 
