@@ -26,6 +26,7 @@ public class HelloServletTest {
     }
 
     @Test
+    @Ignore
     public void doGet() throws Exception {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
@@ -38,6 +39,7 @@ public class HelloServletTest {
     }
 
     @Test
+    @Ignore
     public void doPostWithoutName() throws Exception {
         when(request.getRequestDispatcher("response.jsp"))
             .thenReturn(requestDispatcher);
@@ -49,6 +51,7 @@ public class HelloServletTest {
     }
 
 	@Test
+    @Ignore
     public void doPostWithName() throws Exception {
         when(request.getParameter("name")).thenReturn("Dolly");
         when(request.getRequestDispatcher("response.jsp"))

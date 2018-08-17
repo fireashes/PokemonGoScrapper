@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
@@ -17,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,17 +28,111 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@RunWith(Parameterized.class)
 public class PokemonComTest {
     private WebDriver driver;
     private final Logger log = LoggerFactory.getLogger(PokemonComTest.class);
 
+    @Parameterized.Parameters(name = "test {index}: {0} {1} {2}")
+    public static Collection<Object[]> data() {
+        List<Object[]> paramaterizedData = Arrays.asList(new Object[][]{
+                // Gen I
+                {"Uk", 1, 100},
+                {"Us", 1, 100},
+                {"Uk", 101, 151},
+                {"Us", 101, 151},
+
+                // Gen II
+                {"Uk", 152, 200},
+                {"Us", 152, 200},
+                {"Uk", 201, 251},
+                {"Us", 201, 251},
+
+                // Gen III
+                {"Uk", 252, 300},
+                {"Us", 252, 300},
+                {"Uk", 301, 386},
+                {"Us", 301, 386},
+
+                // Gen IV
+                {"Uk", 387, 400},
+                {"Us", 387, 400},
+                {"Uk", 401, 493},
+                {"Us", 401, 493},
+
+                // Gen V
+                {"Uk", 494, 500},
+                {"Us", 494, 500},
+                {"Uk", 501, 600},
+                {"Us", 501, 600},
+                {"Uk", 601, 649},
+                {"Us", 601, 649},
+
+                // Gen VI
+                {"Uk", 650, 700},
+                {"Us", 650, 700},
+                {"Uk", 701, 721},
+                {"Us", 701, 721},
+
+                // Gen VII
+                {"Uk", 722, 800},
+                {"Us", 722, 800},
+                {"Uk", 801, 806},
+                {"Us", 801, 806},
+
+//                one=083 (1)
+//                two=019 (1>1) (first-last)
+//                three=001 (1>1>1) (first-middle)(middle-last)
+//                four=133 (1>8) (1-2)(1-3)(1-4)(1-5)(1-6)(1-7)(1-8)(1-9)
+//                five=265 (1>2>2) (1-2)(2-3)(1-4)(4-5)
+//                six=043 (1>1>2) (1-2)(2-3)(2-4)
+//                seven=079 (1>2) (1-2)(1-3)
+//                eight=106 (1>3) (1-2)(1-3)(1-4)
+
+//                {"Us", 1, 9},       // evolution3, 2Types,1 Type Mega, Gender male+female, Gender Unknown, 1 ability, space, versions
+//                {"Us", 16, 18},     // 2 abilities
+//                {"Us", 19, 20},
+//                {"Us", 29, 34},
+//                {"Us", 43, 45},
+//                {"Us", 79, 80},
+//                {"Us", 81, 82},
+//                {"Us", 83, 83},
+//                {"Us", 182, 182},
+//                {"Us", 106, 107},
+//                {"Us", 133, 136},
+//                {"Us", 196, 197},
+//                {"Us", 199, 199},
+//                {"Us", 236, 237},
+//                {"Us", 265, 269},
+//                {"Us", 462, 462},
+//                {"Us", 470, 471},
+//                {"Us", 3, 3},
+//                {"Us", 1, 1},
+//                {"Us", 3, 3},
+//                {"Us", 6, 6},
+//                {"Us", 9, 9},
+//                {"Us", 493, 493},
+//                {"Uk", 1, 806},
+//                {"Us", 1, 806},
+
+        });
+        return paramaterizedData;
+    }
+
+    @Parameterized.Parameter
+    public String location;
+
+    @Parameterized.Parameter(1)
+    public int startIndex;
+
+    @Parameterized.Parameter(2)
+    public int endIndex;
+
     @BeforeClass
     public static void setupClass() {
         WebDriverManager.chromedriver().setup();
-
     }
 
     @Before
@@ -54,202 +152,23 @@ public class PokemonComTest {
     }
 
     @Test
-    public void testPokemonComUkPokedexGenI_1_100() {
-        getPokemonComRange("Uk", 1, 100);
+    public void testPokemonCom() {
+        getPokemonComRange(location, startIndex, endIndex);
     }
 
-    @Test
-    public void testPokemonComUkPokedexGenI_101_151() {
-        getPokemonComRange("Uk", 101, 151);
-    }
+    private void getPokemonComRange(String location, int startIndex, int endIndex) {
+        Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + String.format("%03d", startIndex) + "-" + String.format("%03d", endIndex) + ".properties");
 
-    @Test
-    public void testPokemonComUkPokedexGenII_152_200() {
-        getPokemonComRange("Uk", 152, 200);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenII_201_251() {
-        getPokemonComRange("Uk", 201, 251);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenIII_252_300() {
-        getPokemonComRange("Uk", 252, 300);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenIII_301_386() {
-        getPokemonComRange("Uk", 301, 386);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenIV_387_400() {
-        getPokemonComRange("Uk", 387, 400);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenIV_401_492() {
-        getPokemonComRange("Uk", 401, 487);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenIV_493_493() {
-        getPokemonComRange("Uk", 493, 493);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenV_494_500() {
-        getPokemonComRange("Uk", 494, 500);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenV_501_600() {
-        getPokemonComRange("Uk", 501, 600);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenV_601_649() {
-        getPokemonComRange("Uk", 601, 649);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenVI_650_700() {
-        getPokemonComRange("Uk", 650, 700);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenVI_701_721() {
-        getPokemonComRange("Uk", 701, 721);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenVII_722_800() {
-        getPokemonComRange("Uk", 722, 800);
-    }
-
-    @Test
-    public void testPokemonComUkPokedexGenVII_801_806() {
-        getPokemonComRange("Uk", 801, 806);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenI_1_100() {
-        getPokemonComRange("Us", 1, 100);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenI_101_151() {
-        getPokemonComRange("Us", 101, 151);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenII_152_200() {
-        getPokemonComRange("Us", 152, 200);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenII_201_251() {
-        getPokemonComRange("Us", 201, 251);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenIII_252_300() {
-        getPokemonComRange("Us", 252, 300);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenIII_301_386() {
-        getPokemonComRange("Us", 301, 386);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenIV_387_400() {
-        getPokemonComRange("Us", 387, 400);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenIV_401_492() {
-        getPokemonComRange("Us", 401, 487);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenIV_493_493() {
-        getPokemonComRange("Us", 493, 493);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenV_494_500() {
-        getPokemonComRange("Us", 494, 500);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenV_501_600() {
-        getPokemonComRange("Us", 501, 600);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenV_601_649() {
-        getPokemonComRange("Us", 601, 649);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenVI_650_700() {
-        getPokemonComRange("Us", 650, 700);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenVI_701_721() {
-        getPokemonComRange("Us", 701, 721);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenVII_722_800() {
-        getPokemonComRange("Us", 722, 800);
-    }
-
-    @Test
-    public void testPokemonComUsPokedexGenVII_801_806() {
-        getPokemonComRange("Us", 801, 806);
-    }
-
-    @Test
-    public void testPokemonEvolution() {
-        int startIndex = 1;
-        int endIndex = 806;
-        String location = "Us";
-        Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + startIndex + "-" + endIndex + ".properties");
-        List<String> lines = new ArrayList<>();
-
-        log.debug("startIndex = %d; endIndex = %d; location = %s; path = %s", startIndex, endIndex, location, path.toString());
+        log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
+            path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + String.format("%03d", startIndex) + ".properties");
+            log.info("index = " + index);
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
-            try {
-                sleep(1000);
-            } catch (Exception e) {
-                fail(e.getMessage());
-            }
-            PokemonComPage page = new PokemonComPage(driver);
-            if (index == startIndex) {
-                page.dismissCookie();
-            }
-            lines.add(index + "=" + page.findEvolutionClass());
-            appendLinesToFile(lines, path);
-        }
-    }
-
-    public void getPokemonComRange(String location, int startIndex, int endIndex) {
-        Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + startIndex + "-" + endIndex + ".properties");
-
-        log.info("startIndex = %d; endIndex = %d; location = %s; path = %s", startIndex, endIndex, location, path.toString());
-        for (int index = startIndex; index <= endIndex; index++) {
-            log.info("index = %d", index);
-            driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
-            try {
-                sleep(500);
-            } catch (Exception e) {
-                fail(e.getMessage());
-            }
+//            try {
+//                sleep(500);
+//            } catch (Exception e) {
+//                fail(e.getMessage());
+//            }
             PokemonComPage page = new PokemonComPage(driver);
             if (index == startIndex) {
                 page.dismissCookie();
@@ -258,15 +177,15 @@ public class PokemonComTest {
         }
     }
 
-    public void getPageDetails(Path path, int pokedex, PokemonComPage page) {
+    private void getPageDetails(Path path, int pokedex, PokemonComPage page) {
         List<String> lines = new ArrayList<>();
         page.findPokemonNamePokedexFormes();
-
 
         String pokedexTxt = String.format("%03d", pokedex);
 
         assertEquals(pokedexTxt + ": pokedex " + pokedex + " should be equal to pokedex displayed in the page " + page.getPokedex(), pokedex, page.getPokedex());
         assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " should be equal to pokedexTxt displayed in the page " + page.getPokedexTxt(), pokedexTxt, page.getPokedexTxt());
+        assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " and pokedex " + pokedex + " displayed in the page should be same integer", page.getPokedex(), Integer.parseInt(page.getPokedexTxt()));
 
         List<String> formesNamesList = page.getFormesNameList();
 
@@ -284,14 +203,14 @@ public class PokemonComTest {
                 lines.add(pokedexTxt + "." + formeName + ".Versions=" + versions);
                 for (String version : versions) {
                     page.selectVersion(version);
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Description=" + page.getDesctiption());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Height=" + page.getHeight());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Weight=" + page.getWeight());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Genders=" + page.getGenders());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Category=" + page.getCategory());
-                    HashMap pokemonAbilities = page.findAbilities();
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Description=" + page.findDescription());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Height=" + page.findHeight());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Weight=" + page.findWeight());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Genders=" + page.findGenders());
+                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Category=" + page.findCategory());
+                    HashMap pokemonAbilitiesAndDescriptions = page.findAbilitiesAndItsDescriptions();
                     lines.add(pokedexTxt + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
-                    for (Object abilityAbilityDescription : pokemonAbilities.entrySet()) {
+                    for (Object abilityAbilityDescription : pokemonAbilitiesAndDescriptions.entrySet()) {
                         Map.Entry pair = (Map.Entry) abilityAbilityDescription;
                         lines.add(pokedexTxt + "." + formeName + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
                     }
@@ -302,10 +221,11 @@ public class PokemonComTest {
             }
         }
         lines.add(pokedexTxt + ".EvolutionClass=" + page.findEvolutionClass());
+        lines.add(pokedexTxt + ".EvolutionBranches=" + page.findEvolutionBranches());
         appendLinesToFile(lines, path);
     }
 
-    public void appendLinesToFile(List<String> lines, Path path) {
+    private void appendLinesToFile(List<String> lines, Path path) {
         try {
             if (Files.notExists(path) || !Files.isRegularFile(path)) {
                 Files.createFile(path);

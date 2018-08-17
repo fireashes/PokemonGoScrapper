@@ -8,8 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,18 +21,21 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 public class PokemonComPage {
+    private final Logger log = LoggerFactory.getLogger(PokemonComPage.class);
     private final WebDriver driver;
     private WebDriverWait wait;
     //    private Wait<WebDriver> fluentWait;
     private Actions actions;
 
     private List<String> formesNamesList = new ArrayList<>();
-    private String pokemonName = null;
-    private String pokemonNameSimple = null;
-    private String pokedexTxt = null;
+    private String pokemonName = "";
+    private String pokemonNameSimple = "";
+    private String pokedexTxt = "";
     private int pokedex = 0;
 
-    private HashMap<String, String> pokemonAbilities = new HashMap<>();
+    private List<String> evolutionBranches = new ArrayList<>();
+
+    private HashMap<String, String> pokemonAbilitiesAndDescriptions = new HashMap<>();
 
     public PokemonComPage(WebDriver driver) {
         this.driver = driver;
@@ -40,24 +44,59 @@ public class PokemonComPage {
 //                .ignoring(NoSuchElementException.class);
         actions = new Actions(driver);
         PageFactory.initElements(driver, this);
-        actions.moveToElement(pokedexPokemonPaginationTitle);
+        actions.moveToElement(wePokedexPokemonPaginationTitle);
     }
 
     /*
+	//section[contains(@class,'pokedex-pokemon-form')]
+		/div
+			/div[contains(@class,'styled-select')][contains(@class,'button-black')]
+			/div[@class='custom-select-wrapper']
+				/select[@id='formes'][@name='formes']
+					/option
+					/option
+				/div[@class='custom-select-menu']
+					/label[contains(@class,'styled-select')][contains(@class,'button-black')]
+					//ul[@data-select-name='formes']
+                        /li[@class='selected']
+						/li
+					//ul[@data-select-name='overview']
+                        /li[@class='selected']
+						/li
+					/input[@type='hidden']
+				/i[contains(@class,'icon')]
+
+493	//section[@class='section pokedex-pokemon-form']
+		/div
+			/div[@class='custom-select-wrapper']
+				/select[@id='formes'][@name='formes']
+					/option
+				/div[@class='custom-select-menu']
+					/label[contains(@class,'styled-select')][contains(@class,'button-black')]
+					/div
+						/div[@class='viewport']
+							/ul[@class='overview']
+								/li[@class='selected']
+								/li[@class='']
+					/input[@type='hidden']
+				/i[@class='icon icon_arrow_sm_down']
+
+
         //section[contains(@class,'pokedex-pokemon-header')]
             /div[@class='pokedex-pokemon-pagination-title']
 
         //section[contains(@class,'pokedex-pokemon-form')]
-            //div[contains(@class,'styled-select')][contains(@class,'button-black')][contains(@class,'right')]
-            //div[@class='custom-select-wrapper']
-                /select[@id='formes'][@name='formes']
-                    /option[]
-                /div[@class='custom-select-menu']
-                    /label
-                    /ul[@data-select-name='formes']
-                        /li[]
-                        /li[@class='selected']
-                /i[contains(@class,'icon')]
+            /div
+                /div[contains(@class,'styled-select')][contains(@class,'button-black')][contains(@class,'right')]
+                /div[@class='custom-select-wrapper']
+                    /select[@id='formes'][@name='formes']
+                        /option[]
+                    /div[@class='custom-select-menu']
+                        /label[contains(@class,'styled-select button-black right opened')]
+                        /ul[@data-select-name='formes']
+                            /li[]
+                            /li[@class='selected']
+                    /i[contains(@class,'icon')]
 
         //section[contains(@class,'pokedex-pokemon-details')]
             //div[@class='pokedex-pokemon-profile']
@@ -72,7 +111,7 @@ public class PokemonComPage {
                 /div[@class='version-labels']
                     /span[contains(@class,'version-label')][contains(@class,'version-y')][contains(@class,'active')]/i
                     /span[contains(@class,'version-label')][contains(@class,'version-x')][contains(@class,'active')]/i
-                /div[contains(@class,'info')][contains(@class,'match-height-tablet')]
+                /div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]
                     /div[contains(@class,'pokemon-ability-info')]
                     /div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]
                         //span[@class='attribute-title'][contains(text(),'Height')]/../span[@class='attribute-value']
@@ -98,229 +137,6 @@ public class PokemonComPage {
                 /div[@class='collectibles-detail-friends']
 
         //section[contains(@class,'pokedex-pokemon-evolution')]
-
-     */
-    @FindBy(className = "pokedex-pokemon-pagination-title")
-    private WebElement pokedexPokemonPaginationTitle;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]")
-    private WebElement pokedexPokemonForm;
-
-    @FindBy(className = "custom-select-wrapper")
-    private WebElement customSelectWrapper;
-
-    @FindBy(id = "formes")
-    private Select formes;
-
-    @FindBys({
-            @FindBy(xpath = "//select[@id='formes']" +
-                    "/option")
-    })
-    private List<WebElement> formesOptions;
-
-    @FindBy(xpath = "//div[@class='custom-select-menu']")
-    private WebElement customSelectMenu;
-
-    @FindBy(xpath = "//div[@class='custom-select-menu']" +
-            "/label")
-    private WebElement currentFormeLabel;
-
-    @FindBys({
-            @FindBy(xpath = "//div[@class='custom-select-menu']" +
-                    "/ul[@data-select-name='formes']" +
-                    "/li")
-    })
-    private List<WebElement> customSelectMenuFormesNames;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
-            "/p[contains(@class,'version-x')][contains(@class,'active')]")
-    private WebElement versionXActiveDescription;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
-            "/p[contains(@class,'version-y')][contains(@class,'active')]")
-    private WebElement versionYActiveDescription;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
-            "/p[contains(@class,'active')]")
-    private WebElement description;
-
-    @FindBys({
-            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-                    "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[@class='version-labels']" +
-                    "/span[contains(@class,'version-label')]" +
-                    "/i")
-
-    })
-    private List<WebElement> versionsList;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[@class='version-labels']" +
-            "/span[contains(@class,'version-label')][contains(@class,'version-y')]" +
-            "/i")
-    private WebElement versionY;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[@class='version-labels']" +
-            "/span[contains(@class,'version-label')][contains(@class,'version-x')]" +
-            "/i")
-    private WebElement versionX;
-
-    @FindBy(id = "cookie-dismisser")
-    private WebElement cookieDismisser;
-
-    //    @FindBy (xpath = "//div[@class='pokedex-pokemon-details-right']/div/p[1]")
-    @FindBy(xpath = "//div[@class='pokedex-pokemon-details-right'" +
-            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
-            "/p[contains(@class,active)]")
-    private WebElement activeVersionDescription;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Height')]" +
-            "/../span[@class='attribute-value']")
-    private WebElement height;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Weight')]" +
-            "/../span[@class='attribute-value']")
-    private WebElement weight;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
-            "/../span[@class='attribute-value']")
-    private WebElement genders;
-
-    @FindBys({
-            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-                    "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-                    "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-                    "//span[@class='attribute-title'][contains(text(),'Gender')]" +
-                    "/../span[@class='attribute-value']" +
-                    "/i")
-    })
-    List<WebElement> genderList;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
-            "/../span[@class='attribute-value']" +
-            "/i[contains(@class,'icon_male_symbol')]")
-    private WebElement genderMale;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
-            "/../span[@class='attribute-value']" +
-            "/i[contains(@class,'icon_female_symbol')]")
-    private WebElement genderFemale;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
-            "/../span[@class='attribute-value'][contains(text(),'Unknown')]")
-    private WebElement genderUnknown;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-            "//span[@class='attribute-title'][contains(text(),'Category')]" +
-            "/../span[@class='attribute-value']")
-    private WebElement category;
-
-    @FindBys({
-            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-                    "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-                    "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-                    "//span[@class='attribute-title'][contains(text(),'Abilities')]" +
-                    "/../ul[@class='attribute-list']" +
-                    "/li" +
-                    "/a[@class='moreInfo']" +
-                    "/span[@class='attribute-value']")
-    })
-    private List<WebElement> abilities;
-
-    @FindBys({
-            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-                    "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-                    "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
-                    "//span[@class='attribute-title'][contains(text(),'Abilities')]" +
-                    "/..//span[@class='attribute-value']")
-    })
-    private List<WebElement> abilitiesLinks;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-table')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
-            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
-            "/span[@class='button-close']")
-    private WebElement buttonClose;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-table')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
-            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
-            "/h3")
-    private WebElement abilityHeading;
-
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-            "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-height-table')]" +
-            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
-            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
-            "/p")
-    private WebElement abilityDescription;
-
-    @FindBys({
-            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
-                    "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
-                    "/div[contains(@class,'pokedex-pokemon-attributes')][contains(@class,'active')]" +
-                    "/div[@class='dtm-type']" +
-                    "/h3[contains(text(),'Type')]" +
-                    "/..//a")
-    })
-    private List<WebElement> types;
-
-
-/*
-one=083 (1)
-two=019 (1>1) (first-last)
-three=001 (1>1>1) (first-middle)(middle-last)
-four=133 (1>8) (1-2)(1-3)(1-4)(1-5)(1-6)(1-7)(1-8)(1-9)
-five=265 (1>2>2) (1-2)(2-3)(1-4)(4-5)
-six=043 (1>1>2) (1-2)(2-3)(2-4)
-seven=079 (1>2) (1-2)(1-3)
-eight=106 (1>3) (1-2)(1-3)(1-4)
-
     //section[contains(@class,'pokedex-pokemon-evolution')][contains(@class,'evolution-one')]
         //h2
         //p
@@ -342,26 +158,253 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
                             /li
 
 
- */
+
+     */
+    @FindBy(className = "//section[contains(@class='pokedex-pokemon-header')]" +
+            "//pokedex-pokemon-pagination-title")
+    private WebElement wePokedexPokemonPaginationTitle;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+            "//*[contains(@class,'styled-select')]")
+    private WebElement weCurrentFormeName;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+            "//div[contains(@class,'styled-select')]")
+    private WebElement weCurrentFormeDiv;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+            "//label[contains(@class,'styled-select')]")
+    private WebElement weCurrentFormeLabel;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+                    "//select[@id='formes']" +
+                    "/option")
+    })
+    private List<WebElement> welFormesOptions;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+            "//div[@class='custom-select-menu']")
+    private WebElement weCustomSelectMenu;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+                    "//div[@class='custom-select-menu']" +
+                    "//ul[@data-select-name='formes']" +
+                    "/li")
+    })
+    private List<WebElement> welCustomSelectMenuFormesNames;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
+            "//div[@class='custom-select-menu']" +
+            "//ul" +
+            "/li[@class='selected'")
+    private WebElement weSelectedForme;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
+            "/p[contains(@class,'version-x')][contains(@class,'active')]")
+    private WebElement weVersionXActiveDescription;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
+            "/p[contains(@class,'version-y')][contains(@class,'active')]")
+    private WebElement weVersionYActiveDescription;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
+            "/p[contains(@class,'active')]")
+    private WebElement weDescription;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+                    "//div[@class='pokedex-pokemon-details-right']" +
+                    "/div[@class='version-labels']" +
+                    "/span[contains(@class,'version-label')]" +
+                    "/i")
+
+    })
+    private List<WebElement> welVersionsList;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[@class='version-labels']" +
+            "/span[contains(@class,'version-label')][contains(@class,'version-y')]" +
+            "/i")
+    private WebElement weVersionY;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[@class='version-labels']" +
+            "/span[contains(@class,'version-label')][contains(@class,'version-x')]" +
+            "/i")
+    private WebElement weVersionX;
+
+    @FindBy(id = "cookie-dismisser")
+    private WebElement weCookieDismisser;
+
+    @FindBy(xpath = "//div[@class='pokedex-pokemon-details-right'" +
+            "/div[contains(@class,'version-descriptions')][contains(@class,'active')]" +
+            "/p[contains(@class,active)]")
+    private WebElement weActiveVersionDescription;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Height')]" +
+            "/../span[@class='attribute-value']")
+    private WebElement weHeight;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Weight')]" +
+            "/../span[@class='attribute-value']")
+    private WebElement weWeight;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
+            "/../span[@class='attribute-value']")
+    private WebElement weGenders;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+                    "//div[@class='pokedex-pokemon-details-right']" +
+                    "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+                    "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+                    "//span[@class='attribute-title'][contains(text(),'Gender')]" +
+                    "/../span[@class='attribute-value']" +
+                    "/i")
+    })
+    List<WebElement> welGenderList;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
+            "/../span[@class='attribute-value']" +
+            "/i[contains(@class,'icon_male_symbol')]")
+    private WebElement weGenderMale;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
+            "/../span[@class='attribute-value']" +
+            "/i[contains(@class,'icon_female_symbol')]")
+    private WebElement weGenderFemale;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Gender')]" +
+            "/../span[@class='attribute-value'][contains(text(),'Unknown')]")
+    private WebElement weGenderUnknown;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+            "//span[@class='attribute-title'][contains(text(),'Category')]" +
+            "/../span[@class='attribute-value']")
+    private WebElement weCategory;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+                    "//div[@class='pokedex-pokemon-details-right']" +
+                    "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+                    "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
+                    "//span[@class='attribute-title'][contains(text(),'Abilities')]" +
+                    "/..//span[@class='attribute-value']")
+    })
+    private List<WebElement> welAbilities;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-table')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
+            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
+            "/span[@class='button-close']")
+    private WebElement buttonClose;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-table')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
+            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
+            "/h3")
+    private WebElement weAbilityHeading;
+
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+            "//div[@class='pokedex-pokemon-details-right']" +
+            "/div[contains(@class,'info')][contains(@class,'match-weHeight-table')]" +
+            "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
+            "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
+            "/p")
+    private WebElement weAbilityDescription;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
+                    "//div[@class='pokedex-pokemon-details-right']" +
+                    "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+                    "/div[contains(@class,'pokedex-pokemon-attributes')][contains(@class,'active')]" +
+                    "/div[@class='dtm-type']" +
+                    "/h3[contains(text(),'Type')]" +
+                    "/..//a")
+    })
+    private List<WebElement> weTypes;
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]")
-    private WebElement pokedexPokemonEvolution;
+    private WebElement wePokedexPokemonEvolution;
 
-    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')][contains(@class,'evolution-one')]")
-    private WebElement evolutionOne;
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
+                    "//span[@class='pokemon-number']")
+    })
+    private List<WebElement> welAllEvolutionsList;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
+                    "//ul" +
+                    "/li[@class='first']" +
+                    "//h3" +
+                    "/span[@class='pokemon-number']")
+    })
+    private List<WebElement> weEvolutionFirstList;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
+                    "//ul" +
+                    "/li[@class='middle']" +
+                    "//h3" +
+                    "/span[@class='pokemon-number']")
+    })
+    private List<WebElement> weEvolutionMiddleList;
+
+    @FindBys({
+            @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
+                    "//ul" +
+                    "/li[@class='last']" +
+                    "//h3" +
+                    "/span[@class='pokemon-number']")
+    })
+    private List<WebElement> weEvolutionLastList;
 
     public void dismissCookie() {
-        try {
-            cookieDismisser.click();
-            sleepMillis(500);
-        } catch (Exception e) {
-            // Do nothing
-        }
-    }
-
-    public String getCurrentTimestamp() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        return timestamp.toString();
+        wait.until(ExpectedConditions.elementToBeClickable(weCookieDismisser))
+                .click();
+        sleepMillis(500);
     }
 
     public String getTitle() {
@@ -372,11 +415,19 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
         return driver.getCurrentUrl();
     }
 
+    public void sleepMillis(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+    }
+
     public void findPokemonNamePokedex() {
         pokemonName = getTitle()
                 .replace(" | Pokédex", "")
                 .trim();
-        String pokedexPokemonPaginationTitleTxt = wait.until(ExpectedConditions.visibilityOf(pokedexPokemonPaginationTitle))
+        String pokedexPokemonPaginationTitleTxt = wait.until(ExpectedConditions.visibilityOf(wePokedexPokemonPaginationTitle))
                 .getText()
                 .trim();
         String pokemonNameDisplayed = pokedexPokemonPaginationTitleTxt
@@ -391,31 +442,42 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
                 .replaceAll(".*/", "")
                 .trim();
         if (!pokemonName.toLowerCase().equals(pokemonNameSimple.toLowerCase())) {
-            System.out.println(pokedexTxt + ": Pokemon name " + pokemonName + " does not match with simple pokemon name " + pokemonNameSimple);
+            log.info(pokedexTxt + ": Pokemon name " + pokemonName + " does not match with simple pokemon name " + pokemonNameSimple);
         }
     }
 
     public void findPokemonNamePokedexFormes() {
-        findPokemonNamePokedex();
-
+        if (pokemonName.isEmpty() || pokedexTxt.isEmpty() || pokedex == 0 || pokemonNameSimple.isEmpty()) {
+            findPokemonNamePokedex();
+        }
+        formesNamesList.clear();
+        // Create a better logic to make sure it does or does not have formes
+        String styledSelectTagName = wait.until(ExpectedConditions.visibilityOf(weCurrentFormeName))
+                .getTagName()
+                .trim();
+        log.info("Current Forme Name = " + weCurrentFormeName.getText().trim());
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
-        if (numberOfDivInForme == 2) {
-            formesNamesList.add(pokemonName);
-        } else {
+        log.info("numberOfDivInForme = " + numberOfDivInForme);
+        if (numberOfDivInForme == 2 && styledSelectTagName.equals("div")) {
+            formesNamesList.add(weCurrentFormeName.getText().trim());
+        } else if (styledSelectTagName.equals("label")) {
             try {
-                wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
-                currentFormeLabel.click();
-                sleepMillis(500);
-                //wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
-                sleepMillis(500);
+                wePokedexPokemonPaginationTitle.click();
+                weCurrentFormeName.click();
+                sleepMillis(1000);
             } catch (Exception e) {
                 fail(e.getMessage());
             }
-            assertTrue(pokedexTxt + ": Number of forms should be greater than 0", customSelectMenuFormesNames.size() > 0);
-            for (WebElement customSelectMenuFormesName : customSelectMenuFormesNames) {
+            assertTrue(pokedexTxt + ": Number of forms should be greater than 0", welCustomSelectMenuFormesNames.size() > 0);
+            for (WebElement customSelectMenuFormesName : welCustomSelectMenuFormesNames) {
                 String thisFormName = customSelectMenuFormesName.getText().trim();
                 formesNamesList.add(thisFormName);
             }
+
+        } else {
+            System.out.println("Number of div in forme = " + numberOfDivInForme + "; styledSelectTagName = " + styledSelectTagName);
+            log.info("Number of div in forme = " + numberOfDivInForme + "; styledSelectTagName = " + styledSelectTagName);
+            fail("Could not determine if it has formes");
         }
     }
 
@@ -440,10 +502,10 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
     }
 
     public void selectForme(String formeName) {
-        if (pokemonName == null || pokedexTxt == null || formesNamesList == null || pokemonName.isEmpty() || pokedexTxt.isEmpty() || formesNamesList.size() == 0) {
+        if (formesNamesList == null || formesNamesList.size() == 0) {
             findPokemonNamePokedexFormes();
         }
-        pokedexPokemonPaginationTitle.click();
+        wePokedexPokemonPaginationTitle.click();
         if (formesNamesList.size() == 1) {
             if (formeName.equals(pokemonName)) {
                 // Do Nothing
@@ -451,23 +513,22 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
                 fail("Forme not found");
             }
         } else {
-            if (formeName.equals(currentFormeLabel.getText().trim())) {
+            if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
                 // Do Nothing
             } else {
                 for (int i = 0; i < formesNamesList.size(); i++) {
                     if (formeName.equals(formesNamesList.get(i))) {
                         try {
-                            pokedexPokemonPaginationTitle.click();
+                            wePokedexPokemonPaginationTitle.click();
                             sleepMillis(500);
-                            wait.until(ExpectedConditions.visibilityOf(currentFormeLabel));
-                            currentFormeLabel.click();
+                            wait.until(ExpectedConditions.visibilityOf(weCurrentFormeName));
+                            weCurrentFormeName.click();
                             sleepMillis(500);
-                            //wait.until(ExpectedConditions.visibilityOfAllElements(customSelectMenuFormesNames));
+                            // wait.until(ExpectedConditions.visibilityOfAllElements(welCustomSelectMenuFormesNames));
+                            // sleepMillis(500);
+                            welCustomSelectMenuFormesNames.get(i).click();
                             sleepMillis(500);
-
-                            customSelectMenuFormesNames.get(i).click();
-                            sleepMillis(500);
-                            wait.until(ExpectedConditions.textToBePresentInElement(currentFormeLabel, formeName));
+                            wait.until(ExpectedConditions.textToBePresentInElement(weCurrentFormeName, formeName));
                         } catch (Exception e) {
                             fail(pokedex + ":" + pokemonName + ":" + e.getMessage());
                         }
@@ -475,7 +536,7 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
                         // Do Nothing, check next one
                     }
                 }
-                if (formeName.equals(currentFormeLabel.getText().trim())) {
+                if (formeName.equals(weCurrentFormeName.getText().trim())) {
                     // Do Nothing
                 } else {
                     fail("Forme not loaded");
@@ -485,10 +546,10 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
     }
 
     public List<String> findVersions() {
-        wait.until(ExpectedConditions.visibilityOfAllElements(versionsList));
-        wait.until(ExpectedConditions.visibilityOf(versionX));
-        wait.until(ExpectedConditions.visibilityOf(versionY));
-        assertEquals(pokedexTxt + ": There should be two version X and Y", versionsList.size(), 2);
+        wait.until(ExpectedConditions.visibilityOfAllElements(welVersionsList));
+        wait.until(ExpectedConditions.visibilityOf(weVersionX));
+        wait.until(ExpectedConditions.visibilityOf(weVersionY));
+        assertEquals(pokedexTxt + ": There should be two version X and Y", welVersionsList.size(), 2);
         List<String> versions = new ArrayList<>();
         versions.add("Y");
         versions.add("X");
@@ -506,73 +567,42 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
     }
 
     public void selectVersionX() {
-        wait.until(ExpectedConditions.visibilityOf(versionX));
-        versionX.click();
+        wait.until(ExpectedConditions.visibilityOf(weVersionX))
+                .click();
         sleepMillis(500);
     }
 
     public void selectVersionY() {
-        wait.until(ExpectedConditions.visibilityOf(versionY));
-        versionY.click();
+        wait.until(ExpectedConditions.visibilityOf(weVersionY))
+                .click();
         sleepMillis(500);
     }
 
-    public String getDesctiption() {
-        wait.until(ExpectedConditions.visibilityOf(description));
-        return description.getText().trim();
+    public String findDescription() {
+        return wait.until(ExpectedConditions.visibilityOf(weDescription))
+                .getText()
+                .trim();
     }
 
-    public String getTextVersionYActiveDescription() {
-        wait.until(ExpectedConditions.visibilityOf(versionYActiveDescription));
-        if (versionYActiveDescription.isDisplayed()) {
-            return versionYActiveDescription.getText().trim();
-        } else {
-            return null;
-        }
+    public String findHeight() {
+        return wait.until(ExpectedConditions.visibilityOf(weHeight))
+                .getText()
+                .trim();
     }
 
-    public String getTextVersionXActiveDescription() {
-        wait.until(ExpectedConditions.visibilityOf(versionX));
-        versionX.click();
-        wait.until(ExpectedConditions.visibilityOf(versionXActiveDescription));
-        if (versionXActiveDescription.isDisplayed()) {
-            return versionXActiveDescription.getText().trim();
-        } else {
-            return null;
-        }
+    public String findWeight() {
+        return wait.until(ExpectedConditions.visibilityOf(weWeight))
+                .getText()
+                .trim();
     }
 
-
-    public String getFormName(int j) {
-        pokedexPokemonPaginationTitle.click();
-        currentFormeLabel.click();
-        customSelectMenuFormesNames.get(j).click();
-        pokedexPokemonPaginationTitle.click();
-        return customSelectMenuFormesNames.get(j).getText();
-    }
-
-    public String getHeight() {
-        if (height.isDisplayed()) {
-            return height.getText();
-        } else {
-            return null;
-        }
-    }
-
-    public String getWeight() {
-        if (weight.isDisplayed()) {
-            return weight.getText();
-        } else {
-            return null;
-        }
-    }
-
-    public List<String> getGenders() {
+    public List<String> findGenders() {
         List<String> gList = new ArrayList<>();
-        if (genders.getText().equals("Unknown")) {
-            gList.add(genders.getText());
+        wait.until(ExpectedConditions.visibilityOf(weGenders));
+        if (weGenders.getText().trim().equals("Unknown")) {
+            gList.add(weGenders.getText().trim());
         } else {
-            for (WebElement gender : genderList) {
+            for (WebElement gender : welGenderList) {
                 if (gender.getAttribute("class").contains("icon_male_symbol")) {
                     gList.add("Male");
                 } else if (gender.getAttribute("class").contains("icon_female_symbol")) {
@@ -583,48 +613,46 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
         return gList;
     }
 
-    public String getCategory() {
-        if (category.isDisplayed()) {
-            return category.getText();
-        } else {
-            return null;
-        }
+    public String findCategory() {
+        return wait.until(ExpectedConditions.visibilityOf(weCategory))
+                .getText()
+                .trim();
     }
 
-    public HashMap<String, String> findAbilities() {
-        pokemonAbilities.clear();
-        wait.until(ExpectedConditions.visibilityOfAllElements(abilitiesLinks));
-        for (WebElement ability : abilitiesLinks) {
-            wait.until(ExpectedConditions.visibilityOf(ability));
-            wait.until(ExpectedConditions.elementToBeClickable(ability));
+    public HashMap<String, String> findAbilitiesAndItsDescriptions() {
+        pokemonAbilitiesAndDescriptions.clear();
+        wait.until(ExpectedConditions.visibilityOfAllElements(welAbilities));
+        for (WebElement ability : welAbilities) {
+            String abilityName = wait.until(ExpectedConditions.visibilityOf(ability))
+                    .getText()
+                    .trim();
+            wait.until(ExpectedConditions.elementToBeClickable(ability))
+                    .click();
+            sleepMillis(500);
 
-            String abilityName = ability.getText().trim();
+            String abilityHeading = wait.until(ExpectedConditions.visibilityOf(weAbilityHeading))
+                    .getText()
+                    .trim();
 
-            ability.click();
-            sleepMillis(1000);
+            assertEquals(pokedexTxt + ": Ability name should be equal to ability heading", abilityName, abilityHeading);
 
-            wait.until(ExpectedConditions.visibilityOf(abilityHeading));
-            assertEquals(pokedexTxt + ": Ability name should be equal to ability heading", abilityName, abilityHeading.getText().trim());
+            String abilityInfo = wait.until(ExpectedConditions.visibilityOf(weAbilityDescription))
+                    .getText()
+                    .trim();
 
-            wait.until(ExpectedConditions.visibilityOf(abilityDescription));
-            String abilityInfo = abilityDescription.getText().trim();
+            pokemonAbilitiesAndDescriptions.put(abilityName, abilityInfo);
 
-            pokemonAbilities.put(abilityName, abilityInfo);
+            wait.until(ExpectedConditions.visibilityOf(buttonClose))
+                    .click();
 
-            wait.until(ExpectedConditions.visibilityOf(buttonClose));
-            buttonClose.click();
-            sleepMillis(1000);
+            sleepMillis(500);
         }
-        return pokemonAbilities;
-    }
-
-    public HashMap<String, String> getPokemonAbilities() {
-        return pokemonAbilities;
+        return pokemonAbilitiesAndDescriptions;
     }
 
     public List<String> getAbilities() {
         List<String> abilityList = new ArrayList<>();
-        for (Object o : pokemonAbilities.entrySet()) {
+        for (Object o : pokemonAbilitiesAndDescriptions.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             abilityList.add(pair.getKey().toString());
         }
@@ -633,12 +661,12 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
 
 
     public String getAbilityInfo(String ability) {
-//        pokedexPokemonPaginationTitle.click();
+//        wePokedexPokemonPaginationTitle.click();
 //        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(ability))).click();
         wait.until(ExpectedConditions.visibilityOf(buttonClose));
-        assertEquals(pokedexTxt + ": Ability heading should be equal to ability", abilityHeading.getText().trim(), ability);
-        wait.until(ExpectedConditions.visibilityOf(abilityDescription));
-        String abilityInfo = abilityDescription.getText().trim();
+        assertEquals(pokedexTxt + ": Ability heading should be equal to ability", weAbilityHeading.getText().trim(), ability);
+        wait.until(ExpectedConditions.visibilityOf(weAbilityDescription));
+        String abilityInfo = weAbilityDescription.getText().trim();
         buttonClose.click();
         System.out.println(ability + ".info=" + abilityInfo);
         return abilityInfo;
@@ -646,27 +674,103 @@ eight=106 (1>3) (1-2)(1-3)(1-4)
 
     public List<String> getTypes() {
         List<String> typeList = new ArrayList<>();
-        for (WebElement type : types) {
-            if (type.isDisplayed()) {
-                typeList.add(type.getText());
-            }
+        for (WebElement type : weTypes) {
+            typeList.add(type.getText());
         }
         return typeList;
     }
 
     public String findEvolutionClass() {
-        wait.until(ExpectedConditions.visibilityOf(pokedexPokemonEvolution));
-        return pokedexPokemonEvolution
+        return wait.until(ExpectedConditions.visibilityOf(wePokedexPokemonEvolution))
                 .getAttribute("class")
                 .replace("section pokedex-pokemon-evolution", "")
                 .trim();
     }
 
-    public void sleepMillis(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
+    public List<String> findEvolutionBranches() {
+        evolutionBranches.clear();
+        String evolutionClass = findEvolutionClass();
+        switch (evolutionClass) {
+            case "evolution-one":
+                assertEquals(weEvolutionFirstList.size(), 1);
+//                assertEquals(weEvolutionMiddleList.size(), 0);
+//                assertEquals(weEvolutionLastList.size(), 0);
+                assertEquals(welAllEvolutionsList.size(), 1);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionFirstList.get(0)));
+                break;
+            case "evolution-two":
+                assertEquals(weEvolutionFirstList.size(), 1);
+//                assertEquals(weEvolutionMiddleList.size(), 0);
+                assertEquals(weEvolutionLastList.size(), 1);
+                assertEquals(welAllEvolutionsList.size(), 2);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                break;
+            case "evolution-three":
+                assertEquals(weEvolutionFirstList.size(), 1);
+                assertEquals(weEvolutionMiddleList.size(), 1);
+                assertEquals(weEvolutionLastList.size(), 1);
+                assertEquals(welAllEvolutionsList.size(), 3);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
+                break;
+            case "evolution-four":
+                assertEquals(weEvolutionFirstList.size(), 1);
+//                assertEquals(weEvolutionMiddleList.size(), 0);
+                assertEquals(weEvolutionLastList.size(), 8);
+                assertEquals(welAllEvolutionsList.size(), 9);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(3)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(4)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(5)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(6)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(7)));
+                break;
+            case "evolution-five":
+                assertEquals(weEvolutionFirstList.size(), 1);
+                assertEquals(weEvolutionMiddleList.size(), 2);
+                assertEquals(weEvolutionLastList.size(), 2);
+                assertEquals(welAllEvolutionsList.size(), 5);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(1), weEvolutionLastList.get(1)));
+                break;
+            case "evolution-six":
+                assertEquals(weEvolutionFirstList.size(), 1);
+                assertEquals(weEvolutionMiddleList.size(), 1);
+                assertEquals(weEvolutionLastList.size(), 2);
+                assertEquals(welAllEvolutionsList.size(), 4);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(1)));
+                break;
+            case "evolution-seven":
+                assertEquals(weEvolutionFirstList.size(), 1);
+//                assertEquals(weEvolutionMiddleList.size(), 0);
+                assertEquals(weEvolutionLastList.size(), 2);
+                assertEquals(welAllEvolutionsList.size(), 3);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
+                break;
+            case "evolution-eight":
+                assertEquals(weEvolutionFirstList.size(), 1);
+//                assertEquals(weEvolutionMiddleList.size(), 0);
+                assertEquals(weEvolutionLastList.size(), 3);
+                assertEquals(welAllEvolutionsList.size(), 4);
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
+                break;
         }
+        return evolutionBranches;
     }
+
+    public String getEvolutionBranch(WebElement evolutionFrom, WebElement evolutionTo) {
+        return evolutionFrom.getText().replace("#", "").trim()
+                + "_" +
+                evolutionTo.getText().replace("#", "").trim();
+    }
+
 }

@@ -43,6 +43,7 @@ public class HelloServletFunctionalTest {
     }
 
     @Test
+    @Ignore
     public void sayHello() throws Exception {
         driver.get("http://localhost:8081/PokemonGoScrapper");
 
