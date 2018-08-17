@@ -157,11 +157,11 @@ public class PokemonComTest {
     }
 
     private void getPokemonComRange(String location, int startIndex, int endIndex) {
-        Path path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + String.format("%03d", startIndex) + "-" + String.format("%03d", endIndex) + ".properties");
+        Path path = Paths.get("./src/main/data/PokemonCom" + location + "_" + String.format("%03d", startIndex) + "-" + String.format("%03d", endIndex) + ".properties");
 
         log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
-            path = Paths.get("./src/main/resources/PokemonCom" + location + "_" + String.format("%03d", startIndex) + ".properties");
+            path = Paths.get("./src/main/data/PokemonCom" + location + "_" + getGen(index) + ".properties");
             log.info("index = " + index);
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
 //            try {
@@ -170,6 +170,7 @@ public class PokemonComTest {
 //                fail(e.getMessage());
 //            }
             PokemonComPage page = new PokemonComPage(driver);
+            page.sleepMillis(1000);
             if (index == startIndex) {
                 page.dismissCookie();
             }
@@ -237,5 +238,29 @@ public class PokemonComTest {
         for (String line : lines) {
             System.out.println(line);
         }
+    }
+
+    private String getGen(int pokedex) {
+        if (pokedex >= 1 && pokedex <= 151) {
+            return "GenI";
+        } else if (pokedex >= 152 && pokedex <= 251) {
+            return "GenII";
+        } else if (pokedex >= 252 && pokedex <= 386) {
+            return "GenIII";
+        } else if (pokedex >= 387 && pokedex <= 493) {
+            return "GenIV";
+        } else if (pokedex >= 494 && pokedex <= 649) {
+            return "GenV";
+        } else if (pokedex >= 650 && pokedex <= 721) {
+            return "GenVI";
+        } else if (pokedex >= 722 && pokedex <= 806) {
+            return "GenVII";
+        } else {
+            return "";
+        }
+    }
+
+    private String getGen(String pokedexTxt) {
+        return getGen(Integer.parseInt(pokedexTxt));
     }
 }
