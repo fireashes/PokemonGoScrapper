@@ -35,12 +35,14 @@ public class PokemonComTest {
     private WebDriver driver;
     private final Logger log = LoggerFactory.getLogger(PokemonComTest.class);
 
-    @Parameterized.Parameters(name = "test {index}: {0} {1} {2}")
+    @Parameterized.Parameters(name = "test : location {0}; startIndex {1}; endIndex {2}")
     public static Collection<Object[]> data() {
         List<Object[]> paramaterizedData = Arrays.asList(new Object[][]{
                 // Gen I
-                {"Uk", 1, 100},
-                {"Us", 1, 100},
+                {"Uk", 1, 50},
+                {"Us", 1, 50},
+                {"Uk", 51, 100},
+                {"Us", 51, 100},
                 {"Uk", 101, 151},
                 {"Us", 101, 151},
 
@@ -53,20 +55,24 @@ public class PokemonComTest {
                 // Gen III
                 {"Uk", 252, 300},
                 {"Us", 252, 300},
-                {"Uk", 301, 386},
-                {"Us", 301, 386},
+                {"Uk", 301, 350},
+                {"Us", 301, 350},
+                {"Uk", 351, 386},
+                {"Us", 351, 386},
 
                 // Gen IV
                 {"Uk", 387, 400},
                 {"Us", 387, 400},
-                {"Uk", 401, 493},
-                {"Us", 401, 493},
+                {"Uk", 401, 450},
+                {"Us", 401, 450},
+                {"Uk", 451, 493},
+                {"Us", 451, 493},
 
                 // Gen V
-                {"Uk", 494, 500},
-                {"Us", 494, 500},
-                {"Uk", 501, 600},
-                {"Us", 501, 600},
+                {"Uk", 494, 550},
+                {"Us", 494, 550},
+                {"Uk", 551, 600},
+                {"Us", 551, 600},
                 {"Uk", 601, 649},
                 {"Us", 601, 649},
 
@@ -77,10 +83,10 @@ public class PokemonComTest {
                 {"Us", 701, 721},
 
                 // Gen VII
-                {"Uk", 722, 800},
-                {"Us", 722, 800},
-                {"Uk", 801, 806},
-                {"Us", 801, 806},
+                {"Uk", 722, 750},
+                {"Us", 722, 750},
+                {"Uk", 751, 806},
+                {"Us", 751, 806},
 
 //                one=083 (1)
 //                two=019 (1>1) (first-last)
@@ -113,8 +119,8 @@ public class PokemonComTest {
 //                {"Us", 3, 3},
 //                {"Us", 6, 6},
 //                {"Us", 9, 9},
-//                {"Us", 493, 493},
-//                {"Uk", 1, 806},
+                {"Us", 493, 493},
+//                {"Uk", 801, 806},
 //                {"Us", 1, 806},
 
         });
@@ -159,10 +165,10 @@ public class PokemonComTest {
     private void getPokemonComRange(String location, int startIndex, int endIndex) {
         Path path = Paths.get("./src/main/data/PokemonCom" + location + "_" + String.format("%03d", startIndex) + "-" + String.format("%03d", endIndex) + ".properties");
 
-        log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
+//        log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
             path = Paths.get("./src/main/data/PokemonCom" + location + "_" + getGen(index) + ".properties");
-            log.info("index = " + index);
+//            log.info("index = " + index);
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
 //            try {
 //                sleep(500);
@@ -195,9 +201,10 @@ public class PokemonComTest {
         lines.add(pokedexTxt + ".Pokedex=" + page.getPokedex());
         lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
         lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
-
+        log.info("formesNamesList = " + formesNamesList);
         for (String formeName : formesNamesList) {
             try {
+                log.info("formeName = " + formeName);
                 page.selectForme(formeName);
                 sleep(500);
                 List<String> versions = page.findVersions();
@@ -256,7 +263,7 @@ public class PokemonComTest {
         } else if (pokedex >= 722 && pokedex <= 806) {
             return "GenVII";
         } else {
-            return "";
+            return "Gen0";
         }
     }
 

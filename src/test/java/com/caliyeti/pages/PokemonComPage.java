@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +110,7 @@ public class PokemonComPage {
                 /div[@class='version-labels']
                     /span[contains(@class,'version-label')][contains(@class,'version-y')][contains(@class,'active')]/i
                     /span[contains(@class,'version-label')][contains(@class,'version-x')][contains(@class,'active')]/i
-                /div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]
+                /div[contains(@class,'info')][contains(@class,'match-height-tablet')]
                     /div[contains(@class,'pokemon-ability-info')]
                     /div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]
                         //span[@class='attribute-title'][contains(text(),'Height')]/../span[@class='attribute-value']
@@ -160,13 +159,13 @@ public class PokemonComPage {
 
 
      */
-    @FindBy(className = "//section[contains(@class='pokedex-pokemon-header')]" +
-            "//pokedex-pokemon-pagination-title")
+    @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-header')]" +
+            "//div[contains(@class,'pokedex-pokemon-pagination-title')]")
     private WebElement wePokedexPokemonPaginationTitle;
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
             "//*[contains(@class,'styled-select')]")
-    private WebElement weCurrentFormeName;
+    private WebElement weStyledSelect;
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-form')]" +
             "//div[contains(@class,'styled-select')]")
@@ -253,7 +252,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Height')]" +
             "/../span[@class='attribute-value']")
@@ -261,7 +260,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Weight')]" +
             "/../span[@class='attribute-value']")
@@ -269,7 +268,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Gender')]" +
             "/../span[@class='attribute-value']")
@@ -278,7 +277,7 @@ public class PokemonComPage {
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
                     "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
                     "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
                     "//span[@class='attribute-title'][contains(text(),'Gender')]" +
                     "/../span[@class='attribute-value']" +
@@ -288,7 +287,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Gender')]" +
             "/../span[@class='attribute-value']" +
@@ -297,7 +296,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Gender')]" +
             "/../span[@class='attribute-value']" +
@@ -306,7 +305,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Gender')]" +
             "/../span[@class='attribute-value'][contains(text(),'Unknown')]")
@@ -314,7 +313,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
             "//span[@class='attribute-title'][contains(text(),'Category')]" +
             "/../span[@class='attribute-value']")
@@ -323,7 +322,7 @@ public class PokemonComPage {
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
                     "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
                     "/div[contains(@class,'pokemon-ability-info')][contains(@class,'active')]" +
                     "//span[@class='attribute-title'][contains(text(),'Abilities')]" +
                     "/..//span[@class='attribute-value']")
@@ -332,7 +331,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-table')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
             "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
             "/span[@class='button-close']")
@@ -340,7 +339,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-table')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
             "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
             "/h3")
@@ -348,7 +347,7 @@ public class PokemonComPage {
 
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
             "//div[@class='pokedex-pokemon-details-right']" +
-            "/div[contains(@class,'info')][contains(@class,'match-weHeight-table')]" +
+            "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
             "/div[contains(@class,'pokemon-ability-info')][contains(@class,'match')][contains(@class,'active')]" +
             "/div[contains(@class,'pokemon-ability-info-detail')][contains(@class,'match')][contains(@style,'block')]" +
             "/p")
@@ -357,7 +356,7 @@ public class PokemonComPage {
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-details')]" +
                     "//div[@class='pokedex-pokemon-details-right']" +
-                    "/div[contains(@class,'info')][contains(@class,'match-weHeight-tablet')]" +
+                    "/div[contains(@class,'info')][contains(@class,'match-height-tablet')]" +
                     "/div[contains(@class,'pokedex-pokemon-attributes')][contains(@class,'active')]" +
                     "/div[@class='dtm-type']" +
                     "/h3[contains(text(),'Type')]" +
@@ -427,20 +426,26 @@ public class PokemonComPage {
         pokemonName = getTitle()
                 .replace(" | Pokédex", "")
                 .trim();
+        log.debug("pokemonName from title = " + pokemonName);
         String pokedexPokemonPaginationTitleTxt = wait.until(ExpectedConditions.visibilityOf(wePokedexPokemonPaginationTitle))
                 .getText()
                 .trim();
+        log.debug("pokemon name and pokedex displayed, pokedexPokemonPaginationTitleTxt = " + pokedexPokemonPaginationTitleTxt);
         String pokemonNameDisplayed = pokedexPokemonPaginationTitleTxt
                 .replaceAll("#.*", "")
                 .trim();
+        log.debug("pokemonNameDisplayed = " + pokemonNameDisplayed);
         assertTrue("Pokemon name from page tile " + pokemonName + " should be same with pokemon name displayed " + pokemonNameDisplayed, pokemonName.equals(pokemonNameDisplayed));
         pokedexTxt = pokedexPokemonPaginationTitleTxt
                 .replaceAll(".*#", "")
                 .trim();
+        log.debug("pokedexTxt = " + pokedexTxt);
         pokedex = Integer.parseInt(pokedexTxt);
+        log.debug("pokedex = " + pokedex);
         pokemonNameSimple = driver.getCurrentUrl()
                 .replaceAll(".*/", "")
                 .trim();
+        log.debug("pokemonNameSimple = " + pokemonNameSimple);
         if (!pokemonName.toLowerCase().equals(pokemonNameSimple.toLowerCase())) {
             log.info(pokedexTxt + ": Pokemon name " + pokemonName + " does not match with simple pokemon name " + pokemonNameSimple);
         }
@@ -452,19 +457,22 @@ public class PokemonComPage {
         }
         formesNamesList.clear();
         // Create a better logic to make sure it does or does not have formes
-        String styledSelectTagName = wait.until(ExpectedConditions.visibilityOf(weCurrentFormeName))
+        String styledSelectTagName = wait.until(ExpectedConditions.visibilityOf(weStyledSelect))
                 .getTagName()
                 .trim();
-        log.info("Current Forme Name = " + weCurrentFormeName.getText().trim());
+        log.debug("Tag of styled selected webElement, styledSelectTagName = " + styledSelectTagName);
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
-        log.info("numberOfDivInForme = " + numberOfDivInForme);
+        log.debug("numberOfDivInForme = " + numberOfDivInForme);
         if (numberOfDivInForme == 2 && styledSelectTagName.equals("div")) {
-            formesNamesList.add(weCurrentFormeName.getText().trim());
+            formesNamesList.add(pokemonName);
         } else if (styledSelectTagName.equals("label")) {
             try {
-                wePokedexPokemonPaginationTitle.click();
-                weCurrentFormeName.click();
-                sleepMillis(1000);
+                wait.until(ExpectedConditions.visibilityOf(wePokedexPokemonPaginationTitle))
+                        .click();
+                sleepMillis(500);
+                wait.until(ExpectedConditions.visibilityOf(weCurrentFormeLabel))
+                        .click();
+                sleepMillis(500);
             } catch (Exception e) {
                 fail(e.getMessage());
             }
@@ -479,6 +487,7 @@ public class PokemonComPage {
             log.info("Number of div in forme = " + numberOfDivInForme + "; styledSelectTagName = " + styledSelectTagName);
             fail("Could not determine if it has formes");
         }
+        log.info("formesNamesList = " + formesNamesList);
     }
 
     public String getPokemonName() {
@@ -507,28 +516,31 @@ public class PokemonComPage {
         }
         wePokedexPokemonPaginationTitle.click();
         if (formesNamesList.size() == 1) {
+            log.info("formeName = " + formeName);
+            log.info("pokemonName = " + pokemonName);
             if (formeName.equals(pokemonName)) {
-                // Do Nothing
+                log.debug("Form name and pokemon name matches");
             } else {
+                log.info("Form name and pokemon name does not match");
                 fail("Forme not found");
             }
         } else {
             if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
-                // Do Nothing
+                log.debug("Current form name is already selected");
             } else {
                 for (int i = 0; i < formesNamesList.size(); i++) {
                     if (formeName.equals(formesNamesList.get(i))) {
                         try {
                             wePokedexPokemonPaginationTitle.click();
                             sleepMillis(500);
-                            wait.until(ExpectedConditions.visibilityOf(weCurrentFormeName));
-                            weCurrentFormeName.click();
+                            wait.until(ExpectedConditions.visibilityOf(weCurrentFormeLabel));
+                            weCurrentFormeLabel.click();
                             sleepMillis(500);
                             // wait.until(ExpectedConditions.visibilityOfAllElements(welCustomSelectMenuFormesNames));
                             // sleepMillis(500);
                             welCustomSelectMenuFormesNames.get(i).click();
                             sleepMillis(500);
-                            wait.until(ExpectedConditions.textToBePresentInElement(weCurrentFormeName, formeName));
+                            wait.until(ExpectedConditions.textToBePresentInElement(weCurrentFormeLabel, formeName));
                         } catch (Exception e) {
                             fail(pokedex + ":" + pokemonName + ":" + e.getMessage());
                         }
@@ -536,7 +548,7 @@ public class PokemonComPage {
                         // Do Nothing, check next one
                     }
                 }
-                if (formeName.equals(weCurrentFormeName.getText().trim())) {
+                if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
                     // Do Nothing
                 } else {
                     fail("Forme not loaded");
@@ -675,6 +687,7 @@ public class PokemonComPage {
     public List<String> getTypes() {
         List<String> typeList = new ArrayList<>();
         for (WebElement type : weTypes) {
+            actions.moveToElement(type);
             typeList.add(type.getText());
         }
         return typeList;
@@ -690,6 +703,7 @@ public class PokemonComPage {
     public List<String> findEvolutionBranches() {
         evolutionBranches.clear();
         String evolutionClass = findEvolutionClass();
+        actions.moveToElement(wePokedexPokemonEvolution);
         switch (evolutionClass) {
             case "evolution-one":
                 assertEquals(weEvolutionFirstList.size(), 1);
