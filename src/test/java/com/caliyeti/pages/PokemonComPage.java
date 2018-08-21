@@ -39,8 +39,6 @@ public class PokemonComPage {
     public PokemonComPage(WebDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, 30);
-//        fluentWait = new FluentWait<WebDriver>(driver)
-//                .ignoring(NoSuchElementException.class);
         actions = new Actions(driver);
         PageFactory.initElements(driver, this);
         actions.moveToElement(wePokedexPokemonPaginationTitle);
@@ -426,26 +424,26 @@ public class PokemonComPage {
         pokemonName = getTitle()
                 .replace(" | Pokédex", "")
                 .trim();
-        log.debug("pokemonName from title = " + pokemonName);
+//        log.debug("pokemonName from title = " + pokemonName);
         String pokedexPokemonPaginationTitleTxt = wait.until(ExpectedConditions.visibilityOf(wePokedexPokemonPaginationTitle))
                 .getText()
                 .trim();
-        log.debug("pokemon name and pokedex displayed, pokedexPokemonPaginationTitleTxt = " + pokedexPokemonPaginationTitleTxt);
+//        log.debug("pokemon name and pokedex displayed, pokedexPokemonPaginationTitleTxt = " + pokedexPokemonPaginationTitleTxt);
         String pokemonNameDisplayed = pokedexPokemonPaginationTitleTxt
                 .replaceAll("#.*", "")
                 .trim();
-        log.debug("pokemonNameDisplayed = " + pokemonNameDisplayed);
+//        log.debug("pokemonNameDisplayed = " + pokemonNameDisplayed);
         assertTrue("Pokemon name from page tile " + pokemonName + " should be same with pokemon name displayed " + pokemonNameDisplayed, pokemonName.equals(pokemonNameDisplayed));
         pokedexTxt = pokedexPokemonPaginationTitleTxt
                 .replaceAll(".*#", "")
                 .trim();
-        log.debug("pokedexTxt = " + pokedexTxt);
+//        log.debug("pokedexTxt = " + pokedexTxt);
         pokedex = Integer.parseInt(pokedexTxt);
-        log.debug("pokedex = " + pokedex);
+//        log.debug("pokedex = " + pokedex);
         pokemonNameSimple = driver.getCurrentUrl()
                 .replaceAll(".*/", "")
                 .trim();
-        log.debug("pokemonNameSimple = " + pokemonNameSimple);
+//        log.debug("pokemonNameSimple = " + pokemonNameSimple);
         if (!pokemonName.toLowerCase().equals(pokemonNameSimple.toLowerCase())) {
             log.info(pokedexTxt + ": Pokemon name " + pokemonName + " does not match with simple pokemon name " + pokemonNameSimple);
         }
@@ -460,9 +458,9 @@ public class PokemonComPage {
         String styledSelectTagName = wait.until(ExpectedConditions.visibilityOf(weStyledSelect))
                 .getTagName()
                 .trim();
-        log.debug("Tag of styled selected webElement, styledSelectTagName = " + styledSelectTagName);
+//        log.debug("Tag of styled selected webElement, styledSelectTagName = " + styledSelectTagName);
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
-        log.debug("numberOfDivInForme = " + numberOfDivInForme);
+//        log.debug("numberOfDivInForme = " + numberOfDivInForme);
         if (numberOfDivInForme == 2 && styledSelectTagName.equals("div")) {
             formesNamesList.add(pokemonName);
         } else if (styledSelectTagName.equals("label")) {
@@ -481,13 +479,11 @@ public class PokemonComPage {
                 String thisFormName = customSelectMenuFormesName.getText().trim();
                 formesNamesList.add(thisFormName);
             }
-
         } else {
-            System.out.println("Number of div in forme = " + numberOfDivInForme + "; styledSelectTagName = " + styledSelectTagName);
             log.info("Number of div in forme = " + numberOfDivInForme + "; styledSelectTagName = " + styledSelectTagName);
             fail("Could not determine if it has formes");
         }
-        log.info("formesNamesList = " + formesNamesList);
+//        log.info("formesNamesList = " + formesNamesList);
     }
 
     public String getPokemonName() {
@@ -516,20 +512,22 @@ public class PokemonComPage {
         }
         wePokedexPokemonPaginationTitle.click();
         if (formesNamesList.size() == 1) {
-            log.info("formeName = " + formeName);
-            log.info("pokemonName = " + pokemonName);
+//            log.info("formeName = " + formeName);
+//            log.info("pokemonName = " + pokemonName);
             if (formeName.equals(pokemonName)) {
-                log.debug("Form name and pokemon name matches");
+//                log.debug("Form name and pokemon name matches");
             } else {
                 log.info("Form name and pokemon name does not match");
                 fail("Forme not found");
             }
         } else {
             if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
-                log.debug("Current form name is already selected");
+//                log.debug("Current form name is already selected");
             } else {
+//                log.debug("Number of formes = " + formesNamesList.size());
                 for (int i = 0; i < formesNamesList.size(); i++) {
                     if (formeName.equals(formesNamesList.get(i))) {
+//                        log.debug("forme name " + formeName + " found.");
                         try {
                             wePokedexPokemonPaginationTitle.click();
                             sleepMillis(500);
@@ -548,6 +546,7 @@ public class PokemonComPage {
                         // Do Nothing, check next one
                     }
                 }
+//                log.debug("Current selected forme label = " + weCurrentFormeLabel.getText().trim());
                 if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
                     // Do Nothing
                 } else {
@@ -581,13 +580,13 @@ public class PokemonComPage {
     public void selectVersionX() {
         wait.until(ExpectedConditions.visibilityOf(weVersionX))
                 .click();
-        sleepMillis(500);
+        wait.until(ExpectedConditions.visibilityOf(weVersionXActiveDescription));
     }
 
     public void selectVersionY() {
         wait.until(ExpectedConditions.visibilityOf(weVersionY))
                 .click();
-        sleepMillis(500);
+        wait.until(ExpectedConditions.visibilityOf(weVersionYActiveDescription));
     }
 
     public String findDescription() {
@@ -635,9 +634,11 @@ public class PokemonComPage {
         pokemonAbilitiesAndDescriptions.clear();
         wait.until(ExpectedConditions.visibilityOfAllElements(welAbilities));
         for (WebElement ability : welAbilities) {
+            actions.moveToElement(ability);
             String abilityName = wait.until(ExpectedConditions.visibilityOf(ability))
                     .getText()
                     .trim();
+//            log.debug("ability name = " + abilityName);
             wait.until(ExpectedConditions.elementToBeClickable(ability))
                     .click();
             sleepMillis(500);
@@ -646,12 +647,13 @@ public class PokemonComPage {
                     .getText()
                     .trim();
 
+//            log.debug("ability heading = " + abilityHeading);
             assertEquals(pokedexTxt + ": Ability name should be equal to ability heading", abilityName, abilityHeading);
 
             String abilityInfo = wait.until(ExpectedConditions.visibilityOf(weAbilityDescription))
                     .getText()
                     .trim();
-
+//            log.debug("ability info = " + abilityInfo);
             pokemonAbilitiesAndDescriptions.put(abilityName, abilityInfo);
 
             wait.until(ExpectedConditions.visibilityOf(buttonClose))
@@ -673,14 +675,13 @@ public class PokemonComPage {
 
 
     public String getAbilityInfo(String ability) {
-//        wePokedexPokemonPaginationTitle.click();
-//        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(ability))).click();
-        wait.until(ExpectedConditions.visibilityOf(buttonClose));
-        assertEquals(pokedexTxt + ": Ability heading should be equal to ability", weAbilityHeading.getText().trim(), ability);
-        wait.until(ExpectedConditions.visibilityOf(weAbilityDescription));
-        String abilityInfo = weAbilityDescription.getText().trim();
-        buttonClose.click();
-        System.out.println(ability + ".info=" + abilityInfo);
+        String abilityInfo = "";
+        for (Object o : pokemonAbilitiesAndDescriptions.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            if (pair.getKey().toString().equals(ability)) {
+                abilityInfo = pair.getValue().toString();
+            }
+        }
         return abilityInfo;
     }
 

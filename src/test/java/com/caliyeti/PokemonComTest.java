@@ -38,90 +38,127 @@ public class PokemonComTest {
     @Parameterized.Parameters(name = "test : location {0}; startIndex {1}; endIndex {2}")
     public static Collection<Object[]> data() {
         List<Object[]> paramaterizedData = Arrays.asList(new Object[][]{
-                // Gen I
-                {"Uk", 1, 50},
-                {"Us", 1, 50},
-                {"Uk", 51, 100},
-                {"Us", 51, 100},
-                {"Uk", 101, 151},
-                {"Us", 101, 151},
 
-                // Gen II
-                {"Uk", 152, 200},
-                {"Us", 152, 200},
-                {"Uk", 201, 251},
-                {"Us", 201, 251},
+//                {"Uk", 1, 50},
+//                {"Us", 1, 50},
+//                {"Uk", 51, 100},
+//                {"Us", 51, 100},
+//                {"Uk", 101, 151},
+//                {"Us", 101, 151},
+                {"Uk", 121, 151},
+                {"Us", 121, 151},
 
-                // Gen III
-                {"Uk", 252, 300},
-                {"Us", 252, 300},
-                {"Uk", 301, 350},
-                {"Us", 301, 350},
-                {"Uk", 351, 386},
-                {"Us", 351, 386},
+//                {"Uk", 152, 200},
+//                {"Us", 152, 200},
+//                {"Uk", 201, 251},
+//                {"Us", 201, 251},
+                {"Uk", 188, 200},
+                {"Us", 188, 200},
 
-                // Gen IV
-                {"Uk", 387, 400},
-                {"Us", 387, 400},
-                {"Uk", 401, 450},
-                {"Us", 401, 450},
-                {"Uk", 451, 493},
-                {"Us", 451, 493},
+//                {"Uk", 252, 300},
+//                {"Us", 252, 300},
+//                {"Uk", 301, 350},
+//                {"Us", 301, 350},
+//                {"Uk", 351, 386},
+//                {"Us", 351, 386},
+                {"Uk", 232, 300},
+                {"Us", 232, 300},
+                {"Uk", 348, 350},
+                {"Us", 348, 350},
+                {"Uk", 379, 386},
+                {"Us", 379, 386},
 
-                // Gen V
-                {"Uk", 494, 550},
-                {"Us", 494, 550},
-                {"Uk", 551, 600},
-                {"Us", 551, 600},
-                {"Uk", 601, 649},
-                {"Us", 601, 649},
+//                {"Uk", 387, 400},
+//                {"Us", 387, 400},
+//                {"Uk", 401, 450},
+//                {"Us", 401, 450},
+//                {"Uk", 451, 493},
+//                {"Us", 451, 493},
+                {"Uk", 411, 450},
+                {"Us", 411, 450},
 
-                // Gen VI
-                {"Uk", 650, 700},
-                {"Us", 650, 700},
-                {"Uk", 701, 721},
-                {"Us", 701, 721},
+//                {"Uk", 494, 550},
+//                {"Us", 494, 550},
+//                {"Uk", 551, 600},
+//                {"Us", 551, 600},
+//                {"Uk", 601, 649},
+//                {"Us", 601, 649},
 
-                // Gen VII
-                {"Uk", 722, 750},
-                {"Us", 722, 750},
-                {"Uk", 751, 806},
-                {"Us", 751, 806},
+//                {"Uk", 650, 700},
+//                {"Us", 650, 700},
+//                {"Uk", 701, 721},
+//                {"Us", 701, 721},
 
-//                one=083 (1)
-//                two=019 (1>1) (first-last)
-//                three=001 (1>1>1) (first-middle)(middle-last)
-//                four=133 (1>8) (1-2)(1-3)(1-4)(1-5)(1-6)(1-7)(1-8)(1-9)
-//                five=265 (1>2>2) (1-2)(2-3)(1-4)(4-5)
-//                six=043 (1>1>2) (1-2)(2-3)(2-4)
-//                seven=079 (1>2) (1-2)(1-3)
-//                eight=106 (1>3) (1-2)(1-3)(1-4)
+//                {"Uk", 722, 750},
+//                {"Us", 722, 750},
+//                {"Uk", 751, 806},
+//                {"Us", 751, 806},
+                {"Uk", 778, 806},
+                {"Us", 778, 806},
 
-//                {"Us", 1, 9},       // evolution3, 2Types,1 Type Mega, Gender male+female, Gender Unknown, 1 ability, space, versions
-//                {"Us", 16, 18},     // 2 abilities
+//                001 //evolution-three-first, no formes, 2 genders, 1 ability, two types
+//                002 //evolution-three-middle
+//                003 //evolution-three-last, 2 formes,
+//                006 //evolution-three-last, 3 formes, 2 genders, unknown gender,different ability per forme
+//                010 // 1 type
+//                016 //2 abilities
+//                018 //different ability per forme, different description per forme per version
+//                019 //evolution-two
+//                026 //different description per forme  per version,
+//                029 //simple name does not match with pokemon name
+//                032 //simple name does not match with pokemon name
+//                043 //evolution-six-first
+//                044 //evolution-six-middle
+//                045 //evolution-six-last
+//                079 //evolution-seven-first
+//                080 //evolution-seven-last
+//                082 //Unknown gender
+//                083 //evolution-one
+//                083 //simple name does not match with pokemon name
+//                106 //evolution-eight-last
+//                107 //evolution-eight-last
+//                236 //evolution-eight-first
+//                122 //simple name does not match with pokemon name
+//                133 //evolution-four-first
+//                134 //evolution-four-last
+//                265 //evolution-five-first
+//                266 //evolution-five-middle
+//                267 //evolution-five-last
+//                669 //simple name does not match with pokemon name
+//                772 //simple name does not match with pokemon name
+//                785 //simple name does not match with pokemon name
+//                786 //simple name does not match with pokemon name
+//                787 //simple name does not match with pokemon name
+//                788 //simple name does not match with pokemon name
+//                493 //different formes
+
+
+//                {"Us", 1, 3},
+//                {"Us", 6, 6},
+//                {"Us", 10, 10},
+//                {"Us", 16, 18},
 //                {"Us", 19, 20},
+//                {"Us", 25, 26},
 //                {"Us", 29, 34},
 //                {"Us", 43, 45},
 //                {"Us", 79, 80},
-//                {"Us", 81, 82},
+//                {"Us", 81, 81},
 //                {"Us", 83, 83},
-//                {"Us", 182, 182},
 //                {"Us", 106, 107},
 //                {"Us", 133, 136},
+//                {"Us", 122, 122},
+//                {"Us", 182, 182},
 //                {"Us", 196, 197},
 //                {"Us", 199, 199},
 //                {"Us", 236, 237},
 //                {"Us", 265, 269},
 //                {"Us", 462, 462},
 //                {"Us", 470, 471},
-//                {"Us", 3, 3},
-//                {"Us", 1, 1},
-//                {"Us", 3, 3},
-//                {"Us", 6, 6},
-//                {"Us", 9, 9},
-                {"Us", 493, 493},
-//                {"Uk", 801, 806},
-//                {"Us", 1, 806},
+//                {"Us", 493, 493},
+//                {"Us", 669, 669},
+//                {"Us", 772, 772},
+//                {"Us", 785, 788},
+
 
         });
         return paramaterizedData;
@@ -167,7 +204,8 @@ public class PokemonComTest {
 
 //        log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
-            path = Paths.get("./src/main/data/PokemonCom" + location + "_" + getGen(index) + ".properties");
+//            path = Paths.get("./src/main/data/PokemonCom" + location + "_" + getGen(index) + ".properties");
+            path = Paths.get("./src/main/data/PokemonCom/" + location.toLowerCase() + "/" + getGen(index) + "/" + String.format("%03d", index) + ".properties");
 //            log.info("index = " + index);
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
 //            try {
@@ -201,30 +239,38 @@ public class PokemonComTest {
         lines.add(pokedexTxt + ".Pokedex=" + page.getPokedex());
         lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
         lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
-        log.info("formesNamesList = " + formesNamesList);
+//        log.info("formesNamesList = " + formesNamesList);
         for (String formeName : formesNamesList) {
             try {
-                log.info("formeName = " + formeName);
+//                log.info("formeName = " + formeName);
                 page.selectForme(formeName);
+                String formeNameSimple = formeName.replaceAll(" ", "_");
                 sleep(500);
                 List<String> versions = page.findVersions();
-                lines.add(pokedexTxt + "." + formeName + ".Versions=" + versions);
+                lines.add(pokedexTxt + "." + formeNameSimple + ".Versions=" + versions);
                 for (String version : versions) {
                     page.selectVersion(version);
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Description=" + page.findDescription());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Height=" + page.findHeight());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Weight=" + page.findWeight());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Genders=" + page.findGenders());
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Category=" + page.findCategory());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Description=" + page.findDescription());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Height=" + page.findHeight());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Weight=" + page.findWeight());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Genders=" + page.findGenders());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Category=" + page.findCategory());
                     HashMap pokemonAbilitiesAndDescriptions = page.findAbilitiesAndItsDescriptions();
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Abilities=" + page.getAbilities());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Abilities=" + page.getAbilities());
                     for (Object abilityAbilityDescription : pokemonAbilitiesAndDescriptions.entrySet()) {
                         Map.Entry pair = (Map.Entry) abilityAbilityDescription;
-                        lines.add(pokedexTxt + "." + formeName + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
                     }
-                    lines.add(pokedexTxt + "." + formeName + "." + version + ".Types=" + page.getTypes());
+                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Types=" + page.getTypes());
                 }
             } catch (Exception e) {
+//                log.info("Failed after " + lines.get(lines.size() - 1));
+//                log.info(pokedexTxt + ":" + e.getMessage());
+                System.out.println("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location);
+                for (String line : lines) {
+                    System.out.println(line);
+                }
+                System.out.println("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location + "\n");
                 fail(pokedexTxt + ":" + e.getMessage());
             }
         }
@@ -242,9 +288,9 @@ public class PokemonComTest {
         } catch (IOException e) {
             System.out.println("Could not add lines to the file " + path.toString());
         }
-        for (String line : lines) {
-            System.out.println(line);
-        }
+//        for (String line : lines) {
+//            System.out.println(line);
+//        }
     }
 
     private String getGen(int pokedex) {
