@@ -39,8 +39,10 @@ public class PokemonComTest {
     public static Collection<Object[]> data() {
         List<Object[]> paramaterizedData = Arrays.asList(new Object[][]{
 
-                {"Uk", 1, 806},
-                {"Us", 1, 806},
+                {"Uk", 201, 806},
+                {"Us", 201, 806},
+//                {"Fr", 1, 806},
+//                {"Es", 1, 806},
 
 //                {"Uk", 1, 50},
 //                {"Us", 1, 50},
