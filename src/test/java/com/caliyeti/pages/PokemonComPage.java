@@ -575,18 +575,23 @@ public class PokemonComPage {
         } else {
             fail("Version " + version + " not found.");
         }
+        sleepMillis(500);
     }
 
     public void selectVersionX() {
         wait.until(ExpectedConditions.visibilityOf(weVersionX))
                 .click();
+        sleepMillis(500);
         wait.until(ExpectedConditions.visibilityOf(weVersionXActiveDescription));
+        sleepMillis(500);
     }
 
     public void selectVersionY() {
         wait.until(ExpectedConditions.visibilityOf(weVersionY))
                 .click();
+        sleepMillis(500);
         wait.until(ExpectedConditions.visibilityOf(weVersionYActiveDescription));
+        sleepMillis(500);
     }
 
     public String findDescription() {

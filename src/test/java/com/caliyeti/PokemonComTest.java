@@ -39,21 +39,20 @@ public class PokemonComTest {
     public static Collection<Object[]> data() {
         List<Object[]> paramaterizedData = Arrays.asList(new Object[][]{
 
+                {"Uk", 1, 806},
+                {"Us", 1, 806},
+
 //                {"Uk", 1, 50},
 //                {"Us", 1, 50},
 //                {"Uk", 51, 100},
 //                {"Us", 51, 100},
 //                {"Uk", 101, 151},
 //                {"Us", 101, 151},
-                {"Uk", 121, 151},
-                {"Us", 121, 151},
 
 //                {"Uk", 152, 200},
 //                {"Us", 152, 200},
 //                {"Uk", 201, 251},
 //                {"Us", 201, 251},
-                {"Uk", 188, 200},
-                {"Us", 188, 200},
 
 //                {"Uk", 252, 300},
 //                {"Us", 252, 300},
@@ -61,12 +60,6 @@ public class PokemonComTest {
 //                {"Us", 301, 350},
 //                {"Uk", 351, 386},
 //                {"Us", 351, 386},
-                {"Uk", 232, 300},
-                {"Us", 232, 300},
-                {"Uk", 348, 350},
-                {"Us", 348, 350},
-                {"Uk", 379, 386},
-                {"Us", 379, 386},
 
 //                {"Uk", 387, 400},
 //                {"Us", 387, 400},
@@ -74,8 +67,6 @@ public class PokemonComTest {
 //                {"Us", 401, 450},
 //                {"Uk", 451, 493},
 //                {"Us", 451, 493},
-                {"Uk", 411, 450},
-                {"Us", 411, 450},
 
 //                {"Uk", 494, 550},
 //                {"Us", 494, 550},
@@ -93,8 +84,7 @@ public class PokemonComTest {
 //                {"Us", 722, 750},
 //                {"Uk", 751, 806},
 //                {"Us", 751, 806},
-                {"Uk", 778, 806},
-                {"Us", 778, 806},
+
 
 //                001 //evolution-three-first, no formes, 2 genders, 1 ability, two types
 //                002 //evolution-three-middle
@@ -196,15 +186,14 @@ public class PokemonComTest {
 
     @Test
     public void testPokemonCom() {
-        getPokemonComRange(location, startIndex, endIndex);
+        getPokemonComRange(startIndex, endIndex);
     }
 
-    private void getPokemonComRange(String location, int startIndex, int endIndex) {
-        Path path = Paths.get("./src/main/data/PokemonCom" + location + "_" + String.format("%03d", startIndex) + "-" + String.format("%03d", endIndex) + ".properties");
+    private void getPokemonComRange(int startIndex, int endIndex) {
+        Path path = null;
 
 //        log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
-//            path = Paths.get("./src/main/data/PokemonCom" + location + "_" + getGen(index) + ".properties");
             path = Paths.get("./src/main/data/PokemonCom/" + location.toLowerCase() + "/" + getGen(index) + "/" + String.format("%03d", index) + ".properties");
 //            log.info("index = " + index);
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
@@ -233,8 +222,8 @@ public class PokemonComTest {
         assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " and pokedex " + pokedex + " displayed in the page should be same integer", page.getPokedex(), Integer.parseInt(page.getPokedexTxt()));
 
         List<String> formesNamesList = page.getFormesNameList();
-
-        lines.add(pokedexTxt + ".PokemonName=" + page.getPokemonName());
+        String pokemonName = page.getPokemonName();
+        lines.add(pokedexTxt + ".PokemonName=" + pokemonName);
         lines.add(pokedexTxt + ".PokemonNameSimple=" + page.getPokemonNameSimple());
         lines.add(pokedexTxt + ".Pokedex=" + page.getPokedex());
         lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
@@ -242,7 +231,14 @@ public class PokemonComTest {
 //        log.info("formesNamesList = " + formesNamesList);
         for (String formeName : formesNamesList) {
             try {
-//                log.info("formeName = " + formeName);
+                if (formeName.contains(" ")) {
+                    System.out.println(pokedexTxt + ": The forme name '" + formeName + "' contains space.");
+                    log.info(pokedexTxt + ": The forme name '" + formeName + "' contains space.");
+                }
+                if (!formeName.toLowerCase().contains(pokemonName.toLowerCase())) {
+                    System.out.println(pokedexTxt + ": The forme name '" + formeName + "' does not contain the pokemonName '" + pokemonName + "'");
+                    log.info(pokedexTxt + ": The forme name '" + formeName + "' does not contain the pokemonName '" + pokemonName + "'");
+                }
                 page.selectForme(formeName);
                 String formeNameSimple = formeName.replaceAll(" ", "_");
                 sleep(500);
@@ -264,13 +260,12 @@ public class PokemonComTest {
                     lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Types=" + page.getTypes());
                 }
             } catch (Exception e) {
-//                log.info("Failed after " + lines.get(lines.size() - 1));
-//                log.info(pokedexTxt + ":" + e.getMessage());
-                System.out.println("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location);
                 for (String line : lines) {
                     System.out.println(line);
+                    log.info(line);
                 }
                 System.out.println("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location + "\n");
+                log.info("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location + "\n");
                 fail(pokedexTxt + ":" + e.getMessage());
             }
         }
