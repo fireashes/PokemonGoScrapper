@@ -39,8 +39,22 @@ public class PokemonComTest {
     public static Collection<Object[]> data() {
         List<Object[]> paramaterizedData = Arrays.asList(new Object[][]{
 
-                {"Uk", 201, 806},
-                {"Us", 201, 806},
+                {"Uk", 1, 151},
+                {"Uk", 152, 251},
+                {"Uk", 252, 386},
+                {"Uk", 387, 493},
+                {"Uk", 494, 649},
+                {"Uk", 650, 721},
+                {"Uk", 722, 806},
+
+                {"Us", 1, 151},
+                {"Us", 152, 251},
+                {"Us", 252, 386},
+                {"Us", 387, 493},
+                {"Us", 494, 649},
+                {"Us", 650, 721},
+                {"Us", 722, 806},
+
 //                {"Fr", 1, 806},
 //                {"Es", 1, 806},
 
@@ -144,6 +158,9 @@ public class PokemonComTest {
 //                {"Us", 199, 199},
 //                {"Us", 236, 237},
 //                {"Us", 265, 269},
+//                {"Us", 412, 412},
+//                {"Us", 413, 413},
+//                {"Us", 414, 414},
 //                {"Us", 462, 462},
 //                {"Us", 470, 471},
 //                {"Us", 493, 493},
@@ -194,16 +211,10 @@ public class PokemonComTest {
     private void getPokemonComRange(int startIndex, int endIndex) {
         Path path = null;
 
-//        log.info("startIndex = " + startIndex + "; endIndex = " + endIndex + "; location = " + location + "; path = " + path.toString());
         for (int index = startIndex; index <= endIndex; index++) {
             path = Paths.get("./src/main/data/PokemonCom/" + location.toLowerCase() + "/" + getGen(index) + "/" + String.format("%03d", index) + ".properties");
-//            log.info("index = " + index);
+            path = Paths.get("./src/main/data/PokemonCom/" + location.toLowerCase() + "_" + getGen(index) + ".properties");
             driver.get("https://www.pokemon.com/" + location.toLowerCase() + "/pokedex/" + index);
-//            try {
-//                sleep(500);
-//            } catch (Exception e) {
-//                fail(e.getMessage());
-//            }
             PokemonComPage page = new PokemonComPage(driver);
             page.sleepMillis(1000);
             if (index == startIndex) {
@@ -215,31 +226,30 @@ public class PokemonComTest {
 
     private void getPageDetails(Path path, int pokedex, PokemonComPage page) {
         List<String> lines = new ArrayList<>();
-        page.findPokemonNamePokedexFormes();
-
         String pokedexTxt = String.format("%03d", pokedex);
+        try {
+            page.findPokemonNamePokedexFormes();
 
-        assertEquals(pokedexTxt + ": pokedex " + pokedex + " should be equal to pokedex displayed in the page " + page.getPokedex(), pokedex, page.getPokedex());
-        assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " should be equal to pokedexTxt displayed in the page " + page.getPokedexTxt(), pokedexTxt, page.getPokedexTxt());
-        assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " and pokedex " + pokedex + " displayed in the page should be same integer", page.getPokedex(), Integer.parseInt(page.getPokedexTxt()));
+            assertEquals(pokedexTxt + ": pokedex " + pokedex + " should be equal to pokedex displayed in the page " + page.getPokedex(), pokedex, page.getPokedex());
+            assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " should be equal to pokedexTxt displayed in the page " + page.getPokedexTxt(), pokedexTxt, page.getPokedexTxt());
+            assertEquals(pokedexTxt + ": pokedexTxt " + pokedexTxt + " and pokedex " + pokedex + " displayed in the page should be same integer", page.getPokedex(), Integer.parseInt(page.getPokedexTxt()));
 
-        List<String> formesNamesList = page.getFormesNameList();
-        String pokemonName = page.getPokemonName();
-        lines.add(pokedexTxt + ".PokemonName=" + pokemonName);
-        lines.add(pokedexTxt + ".PokemonNameSimple=" + page.getPokemonNameSimple());
-        lines.add(pokedexTxt + ".Pokedex=" + page.getPokedex());
-        lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
-        lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
-//        log.info("formesNamesList = " + formesNamesList);
-        for (String formeName : formesNamesList) {
-            try {
-                if (formeName.contains(" ")) {
-                    System.out.println(pokedexTxt + ": The forme name '" + formeName + "' contains space.");
-                    log.info(pokedexTxt + ": The forme name '" + formeName + "' contains space.");
-                }
-                if (!formeName.toLowerCase().contains(pokemonName.toLowerCase())) {
-                    System.out.println(pokedexTxt + ": The forme name '" + formeName + "' does not contain the pokemonName '" + pokemonName + "'");
-                    log.info(pokedexTxt + ": The forme name '" + formeName + "' does not contain the pokemonName '" + pokemonName + "'");
+            List<String> formesNamesList = page.getFormesNameList();
+            String pokemonName = page.getPokemonName();
+            lines.add(pokedexTxt + ".PokemonName=" + pokemonName);
+            String pokemonNameSimple = page.getPokemonNameSimple();
+            lines.add(pokedexTxt + ".PokemonNameSimple=" + pokemonNameSimple);
+            if (!pokemonName.equalsIgnoreCase(pokemonNameSimple)) {
+                System.out.println(pokedexTxt + ": Pokemon name and simple name don't match. '" + pokemonName + "' != '" + pokemonNameSimple + "'");
+                log.info(pokedexTxt + ": Pokemon name and simple name don't match. '" + pokemonName + "' != '" + pokemonNameSimple + "'");
+            }
+            lines.add(pokedexTxt + ".Pokedex=" + page.getPokedex());
+            lines.add(pokedexTxt + ".PokedexTxt=" + page.getPokedexTxt());
+            lines.add(pokedexTxt + ".PokemonFormes=" + page.getFormesNameList());
+            for (String formeName : formesNamesList) {
+                if (!formeName.equalsIgnoreCase(pokemonName)) {
+                    System.out.println(pokedexTxt + ": Pokemon name and forme  name don't match. '" + pokemonName + "' != '" + formeName + "'");
+                    log.info(pokedexTxt + ": Pokemon name and forme  name don't match. '" + pokemonName + "' != '" + formeName + "'");
                 }
                 page.selectForme(formeName);
                 String formeNameSimple = formeName.replaceAll(" ", "_");
@@ -249,31 +259,41 @@ public class PokemonComTest {
                 for (String version : versions) {
                     page.selectVersion(version);
                     lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Description=" + page.findDescription());
-                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Height=" + page.findHeight());
-                    lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Weight=" + page.findWeight());
+                    if (location.equalsIgnoreCase("uk")) {
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Height_m=" + page.findHeight().replaceAll("m$","").trim());
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Weight_kg=" + page.findWeight().replaceAll("kg$","").trim());
+                    } else if (location.equalsIgnoreCase("us")) {
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Height_ft_in=" + page.findHeight());
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Weight_lbs=" + page.findWeight().replaceAll("lbs$","").trim());
+                    } else {
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Height=" + page.findHeight());
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Weight=" + page.findWeight());
+                    }
                     lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Genders=" + page.findGenders());
                     lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Category=" + page.findCategory());
                     HashMap pokemonAbilitiesAndDescriptions = page.findAbilitiesAndItsDescriptions();
                     lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Abilities=" + page.getAbilities());
                     for (Object abilityAbilityDescription : pokemonAbilitiesAndDescriptions.entrySet()) {
                         Map.Entry pair = (Map.Entry) abilityAbilityDescription;
-                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Ability." + pair.getKey() + "=" + pair.getValue());
+                        lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Ability." + pair.getKey().toString().replaceAll(" ", "_") + "=" + pair.getValue().toString());
                     }
                     lines.add(pokedexTxt + "." + formeNameSimple + "." + version + ".Types=" + page.getTypes());
                 }
-            } catch (Exception e) {
-                for (String line : lines) {
-                    System.out.println(line);
-                    log.info(line);
-                }
-                System.out.println("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location + "\n");
-                log.info("Could not finish pokedexTxt=" + pokedexTxt + "; location=" + location + "\n");
-                fail(pokedexTxt + ":" + e.getMessage());
             }
+            lines.add(pokedexTxt + ".EvolutionClass=" + page.findEvolutionClass());
+            lines.add(pokedexTxt + ".EvolutionBranches=" + page.findEvolutionBranches());
+            appendLinesToFile(lines, path);
+        } catch (Exception e) {
+//            for (String line : lines) {
+//                System.out.println(line);
+//                log.info(line);
+//            }
+            System.out.println("Failed after performing : " + lines.get(lines.size() - 1));
+            log.info("Failed after performing : " + lines.get(lines.size() - 1));
+            System.out.println("Could not finish pokedexTxt='" + pokedexTxt + "'; location='" + location + "'\n");
+            log.info("Could not finish pokedexTxt='" + pokedexTxt + "'; location='" + location + "'\n");
+            fail(pokedexTxt + ":" + e.getMessage());
         }
-        lines.add(pokedexTxt + ".EvolutionClass=" + page.findEvolutionClass());
-        lines.add(pokedexTxt + ".EvolutionBranches=" + page.findEvolutionBranches());
-        appendLinesToFile(lines, path);
     }
 
     private void appendLinesToFile(List<String> lines, Path path) {
@@ -285,9 +305,6 @@ public class PokemonComTest {
         } catch (IOException e) {
             System.out.println("Could not add lines to the file " + path.toString());
         }
-//        for (String line : lines) {
-//            System.out.println(line);
-//        }
     }
 
     private String getGen(int pokedex) {

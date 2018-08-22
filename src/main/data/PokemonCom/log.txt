@@ -1,0 +1,16 @@
+[Test worker] INFO io.github.bonigarcia.wdm.WebDriverManager - Reading https://chromedriver.storage.googleapis.com/ to seek chromedriver
+[Test worker] INFO io.github.bonigarcia.wdm.WebDriverManager - Latest version of chromedriver is 2.41
+[Test worker] INFO io.github.bonigarcia.wdm.Downloader - Using binary driver previously downloaded
+[Test worker] INFO io.github.bonigarcia.wdm.WebDriverManager - Exporting webdriver.chrome.driver as /Users/adhakal/.m2/repository/webdriver/chromedriver/mac64/2.41/chromedriver
+[Test worker] INFO com.caliyeti.PokemonComTest - 003: Pokemon name and forme  name don't match. 'Venusaur' != 'Mega Venusaur'
+[Test worker] INFO com.caliyeti.PokemonComTest - 006: Pokemon name and forme  name don't match. 'Charizard' != 'Mega Charizard X'
+[Test worker] INFO com.caliyeti.PokemonComTest - 006: Pokemon name and forme  name don't match. 'Charizard' != 'Mega Charizard Y'
+[Test worker] INFO com.caliyeti.PokemonComTest - 009: Pokemon name and forme  name don't match. 'Blastoise' != 'Mega Blastoise'
+[Test worker] INFO com.caliyeti.PokemonComTest - 015: Pokemon name and forme  name don't match. 'Beedrill' != 'Mega Beedrill'
+[Test worker] INFO com.caliyeti.PokemonComTest - 018: Pokemon name and forme  name don't match. 'Pidgeot' != 'Mega Pidgeot'
+[Test worker] INFO com.caliyeti.PokemonComTest - 019: Pokemon name and forme  name don't match. 'Rattata' != 'Alola Form'
+[Test worker] INFO com.caliyeti.PokemonComTest - 020: Pokemon name and forme  name don't match. 'Raticate' != 'Alola Form'
+[Test worker] INFO com.caliyeti.PokemonComTest - 026: Pokemon name and forme  name don't match. 'Raichu' != 'Alola Form'
+[Test worker] INFO com.caliyeti.PokemonComTest - 027: Pokemon name and forme  name don't match. 'Sandshrew' != 'Alola Form'
+[Test worker] INFO com.caliyeti.PokemonComTest - 028: Pokemon name and forme  name don't match. 'Sandslash' != 'Alola Form'
+[Test worker] INFO com.caliyeti.PokemonComTest - 029: Pokemon name and simple name don't match. 'Nidoran♀' != 'nidoran-female'

@@ -445,7 +445,8 @@ public class PokemonComPage {
                 .trim();
 //        log.debug("pokemonNameSimple = " + pokemonNameSimple);
         if (!pokemonName.toLowerCase().equals(pokemonNameSimple.toLowerCase())) {
-            log.info(pokedexTxt + ": Pokemon name " + pokemonName + " does not match with simple pokemon name " + pokemonNameSimple);
+//            System.out.println(pokedexTxt + ": Pokemon name '" + pokemonName + "' and simple pokemon name '" + pokemonNameSimple + "' does not match");
+//            log.info(pokedexTxt + ": Pokemon name '" + pokemonName + "' and simple pokemon name '" + pokemonNameSimple + "' does not match");
         }
     }
 
@@ -734,18 +735,27 @@ public class PokemonComPage {
                 evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
                 break;
             case "evolution-four":
-                assertEquals(weEvolutionFirstList.size(), 1);
+                if (pokedex == 412 || pokedex == 413 || pokedex == 414) {
+                    assertEquals(weEvolutionFirstList.size(), 1);
 //                assertEquals(weEvolutionMiddleList.size(), 0);
-                assertEquals(weEvolutionLastList.size(), 8);
-                assertEquals(welAllEvolutionsList.size(), 9);
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(3)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(4)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(5)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(6)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(7)));
+                    assertEquals(weEvolutionLastList.size(), 4);
+                    assertEquals(welAllEvolutionsList.size(), 5);
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(4)));
+                } else {
+                    assertEquals(weEvolutionFirstList.size(), 1);
+//                assertEquals(weEvolutionMiddleList.size(), 0);
+                    assertEquals(weEvolutionLastList.size(), 8);
+                    assertEquals(welAllEvolutionsList.size(), 9);
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(3)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(4)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(5)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(6)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(7)));
+                }
                 break;
             case "evolution-five":
                 assertEquals(weEvolutionFirstList.size(), 1);
