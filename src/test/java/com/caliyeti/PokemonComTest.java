@@ -182,6 +182,8 @@ public class PokemonComTest {
             log.info("Could not finish pokedexTxt='" + pokedexTxt + "'; location='" + location + "'\n");
             System.out.println(e.getMessage());
             log.error(e.getMessage());
+
+            e.printStackTrace();
 //            fail(pokedexTxt + ":" + e.getMessage());
         }
     }

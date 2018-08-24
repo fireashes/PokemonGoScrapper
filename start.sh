@@ -2,6 +2,7 @@
 # netstat -vanp tcp | grep 8081
 # lsof -i tcp:8081
 # kill -9 <PID>
+#./gradlew appStop farmStop jettyStop tomcatStop
 
 sortUnique(){
     for f in $(find ./src/main/data/PokemonCom -name *.txt -o -name *.properties | sort); do

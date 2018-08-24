@@ -3,13 +3,10 @@ package com.caliyeti.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +17,8 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class PokemonComPage {
+public class PokemonComPage extends PokemonPage {
     private final Logger log = LoggerFactory.getLogger(PokemonComPage.class);
-    private final WebDriver driver;
-    private WebDriverWait wait;
-    //    private Wait<WebDriver> fluentWait;
-    private Actions actions;
 
     private List<String> formesNamesList = new ArrayList<>();
     private String pokemonName = "";
@@ -38,10 +31,7 @@ public class PokemonComPage {
     private HashMap<String, String> pokemonAbilitiesAndDescriptions = new HashMap<>();
 
     public PokemonComPage(WebDriver driver) {
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 30);
-        actions = new Actions(driver);
-        PageFactory.initElements(driver, this);
+        super(driver);
         actions.moveToElement(wePokedexPokemonPaginationTitle);
     }
 
@@ -361,7 +351,7 @@ public class PokemonComPage {
                     "/h3[contains(text(),'Type')]" +
                     "/..//a")
     })
-    private List<WebElement> weTypes;
+    private List<WebElement> welTypes;
 
     @CacheLookup
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]")
@@ -382,7 +372,7 @@ public class PokemonComPage {
                     "//h3" +
                     "/span[@class='pokemon-number']")
     })
-    private List<WebElement> weEvolutionFirstList;
+    private List<WebElement> welEvolutionFirstList;
 
     @CacheLookup
     @FindBys({
@@ -392,7 +382,7 @@ public class PokemonComPage {
                     "//h3" +
                     "/span[@class='pokemon-number']")
     })
-    private List<WebElement> weEvolutionMiddleList;
+    private List<WebElement> welEvolutionMiddleList;
 
     @CacheLookup
     @FindBys({
@@ -402,28 +392,12 @@ public class PokemonComPage {
                     "//h3" +
                     "/span[@class='pokemon-number']")
     })
-    private List<WebElement> weEvolutionLastList;
+    private List<WebElement> welEvolutionLastList;
 
     public void dismissCookie() {
         wait.until(ExpectedConditions.elementToBeClickable(weCookieDismisser))
                 .click();
         sleepMillis(500);
-    }
-
-    public String getTitle() {
-        return driver.getTitle();
-    }
-
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
-    }
-
-    public void sleepMillis(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            fail(e.getMessage());
-        }
     }
 
     public void findPokemonNamePokedex() {
@@ -438,7 +412,7 @@ public class PokemonComPage {
                 .trim();
         assertTrue("Pokemon name from page tile " + pokemonName + " should be same with pokemon name displayed " + pokemonNameDisplayed, pokemonName.equals(pokemonNameDisplayed));
         pokedexTxt = pokedexPokemonPaginationTitleTxt
-                .replaceAll(".*#", "")
+                .replaceAll(".*(\\d{3}).*", "$1")
                 .trim();
         pokedex = Integer.parseInt(pokedexTxt);
         pokemonNameSimple = driver.getCurrentUrl()
@@ -682,7 +656,7 @@ public class PokemonComPage {
 
     public List<String> getTypes() {
         List<String> typeList = new ArrayList<>();
-        for (WebElement type : weTypes) {
+        for (WebElement type : welTypes) {
             actions.moveToElement(type);
             typeList.add(type.getText());
         }
@@ -702,99 +676,99 @@ public class PokemonComPage {
         actions.moveToElement(wePokedexPokemonEvolution);
 
         /*
-        log.info(pokedexTxt + " : evolution First : " + getTexts(weEvolutionFirstList) + " = " + weEvolutionFirstList.size());
-        if (weEvolutionMiddleList != null) {
-            log.info(pokedexTxt + " : evolution Middle : " + getTexts(weEvolutionMiddleList) + " = " + weEvolutionMiddleList.size());
+        log.info(pokedexTxt + " : evolution First : " + getTexts(welEvolutionFirstList) + " = " + welEvolutionFirstList.size());
+        if (welEvolutionMiddleList != null) {
+            log.info(pokedexTxt + " : evolution Middle : " + getTexts(welEvolutionMiddleList) + " = " + welEvolutionMiddleList.size());
         } else {
             log.info(pokedexTxt + " : evolution Middle : null");
         }
-        log.info(pokedexTxt + " : evolution Last : " + getTexts(weEvolutionLastList) + " = " + weEvolutionLastList.size());
+        log.info(pokedexTxt + " : evolution Last : " + getTexts(welEvolutionLastList) + " = " + welEvolutionLastList.size());
         log.info(pokedexTxt + " : evolution All : " + getTexts(welAllEvolutionsList) + " = " + welAllEvolutionsList.size());
         */
 
         switch (evolutionClass) {
             case "evolution-one":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
-//                assertEquals("There should be 0 from evolution last list ", 0, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());
+//                assertEquals("There should be 0 from evolution last list ", 0, welEvolutionLastList.size());
                 assertEquals("There should be 1 from evolution all list ", 1, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionFirstList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionFirstList.get(0)));
                 break;
             case "evolution-two":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
-                assertEquals("There should be 1 from evolution last list ", 1, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());
+                assertEquals("There should be 1 from evolution last list ", 1, welEvolutionLastList.size());
                 assertEquals("There should be 2 from evolution all list ", 2, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(0)));
                 break;
             case "evolution-three":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-                assertEquals("There should be 1 from evolution middle list ", 1, weEvolutionMiddleList.size());
-                assertEquals("There should be 1 from evolution last list ", 1, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+                assertEquals("There should be 1 from evolution middle list ", 1, welEvolutionMiddleList.size());
+                assertEquals("There should be 1 from evolution last list ", 1, welEvolutionLastList.size());
                 assertEquals("There should be 3 from evolution all list ", 3, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionMiddleList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionMiddleList.get(0), welEvolutionLastList.get(0)));
                 break;
             case "evolution-four":
                 log.info(pokedex + ": Inside evolution-four");
                 if (pokedex == 412 || pokedex == 413 || pokedex == 414) {
-                    assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-//                    assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
-                    assertEquals("There should be 4 from evolution last list ", 4, weEvolutionLastList.size());
+                    assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+//                    assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());
+                    assertEquals("There should be 4 from evolution last list ", 4, welEvolutionLastList.size());
                     assertEquals("There should be 5 from evolution all list ", 5, welAllEvolutionsList.size());
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(3)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(0)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(3)));
                 } else {
                     log.info(pokedex + ": Inside else pokedex " + pokedex);
-                    assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-//                    assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
-                    assertEquals("There should be 8 from evolution last list ", 8, weEvolutionLastList.size());
+                    assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+//                    assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());
+                    assertEquals("There should be 8 from evolution last list ", 8, welEvolutionLastList.size());
                     assertEquals("There should be 9 from evolution all list ", 9, welAllEvolutionsList.size());
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(3)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(4)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(5)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(6)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(7)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(0)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(1)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(2)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(3)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(4)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(5)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(6)));
+                    evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(7)));
                 }
                 break;
             case "evolution-five":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-                assertEquals("There should be 2 from evolution middle list ", 2, weEvolutionMiddleList.size());
-                assertEquals("There should be 2 from evolution last list ", 2, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+                assertEquals("There should be 2 from evolution middle list ", 2, welEvolutionMiddleList.size());
+                assertEquals("There should be 2 from evolution last list ", 2, welEvolutionLastList.size());
                 assertEquals("There should be 5 from evolution all list ", 5, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(1)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(1), weEvolutionLastList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionMiddleList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionMiddleList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionMiddleList.get(0), welEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionMiddleList.get(1), welEvolutionLastList.get(1)));
                 break;
             case "evolution-six":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-                assertEquals("There should be 1 from evolution middle list ", 1, weEvolutionMiddleList.size());
-                assertEquals("There should be 2 from evolution last list ", 2, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+                assertEquals("There should be 1 from evolution middle list ", 1, welEvolutionMiddleList.size());
+                assertEquals("There should be 2 from evolution last list ", 2, welEvolutionLastList.size());
                 assertEquals("There should be 4 from evolution all list ", 4, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionMiddleList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionMiddleList.get(0), welEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionMiddleList.get(0), welEvolutionLastList.get(1)));
                 break;
             case "evolution-seven":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
-                assertEquals("There should be 2 from evolution last list ", 2, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());
+                assertEquals("There should be 2 from evolution last list ", 2, welEvolutionLastList.size());
                 assertEquals("There should be 3 from evolution all list ", 3, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(1)));
                 break;
             case "evolution-eight":
-                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
-//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
-                assertEquals("There should be 3 from evolution last list ", 3, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());
+                assertEquals("There should be 3 from evolution last list ", 3, welEvolutionLastList.size());
                 assertEquals("There should be 4 from evolution all list ", 4, welAllEvolutionsList.size());
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
-                evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(0)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(1)));
+                evolutionBranches.add(getEvolutionBranch(welEvolutionFirstList.get(0), welEvolutionLastList.get(2)));
                 break;
         }
         return evolutionBranches;
