@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
@@ -362,15 +363,18 @@ public class PokemonComPage {
     })
     private List<WebElement> weTypes;
 
+    @CacheLookup
     @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]")
     private WebElement wePokedexPokemonEvolution;
 
+    @CacheLookup
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
                     "//span[@class='pokemon-number']")
     })
     private List<WebElement> welAllEvolutionsList;
 
+    @CacheLookup
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
                     "//ul" +
@@ -380,6 +384,7 @@ public class PokemonComPage {
     })
     private List<WebElement> weEvolutionFirstList;
 
+    @CacheLookup
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
                     "//ul" +
@@ -389,6 +394,7 @@ public class PokemonComPage {
     })
     private List<WebElement> weEvolutionMiddleList;
 
+    @CacheLookup
     @FindBys({
             @FindBy(xpath = "//section[contains(@class,'pokedex-pokemon-evolution')]" +
                     "//ul" +
@@ -424,26 +430,20 @@ public class PokemonComPage {
         pokemonName = getTitle()
                 .replace(" | Pokédex", "")
                 .trim();
-//        log.debug("pokemonName from title = " + pokemonName);
         String pokedexPokemonPaginationTitleTxt = wait.until(ExpectedConditions.visibilityOf(wePokedexPokemonPaginationTitle))
                 .getText()
                 .trim();
-//        log.debug("pokemon name and pokedex displayed, pokedexPokemonPaginationTitleTxt = " + pokedexPokemonPaginationTitleTxt);
         String pokemonNameDisplayed = pokedexPokemonPaginationTitleTxt
                 .replaceAll("#.*", "")
                 .trim();
-//        log.debug("pokemonNameDisplayed = " + pokemonNameDisplayed);
         assertTrue("Pokemon name from page tile " + pokemonName + " should be same with pokemon name displayed " + pokemonNameDisplayed, pokemonName.equals(pokemonNameDisplayed));
         pokedexTxt = pokedexPokemonPaginationTitleTxt
                 .replaceAll(".*#", "")
                 .trim();
-//        log.debug("pokedexTxt = " + pokedexTxt);
         pokedex = Integer.parseInt(pokedexTxt);
-//        log.debug("pokedex = " + pokedex);
         pokemonNameSimple = driver.getCurrentUrl()
                 .replaceAll(".*/", "")
                 .trim();
-//        log.debug("pokemonNameSimple = " + pokemonNameSimple);
         if (!pokemonName.toLowerCase().equals(pokemonNameSimple.toLowerCase())) {
 //            System.out.println(pokedexTxt + ": Pokemon name '" + pokemonName + "' and simple pokemon name '" + pokemonNameSimple + "' does not match");
 //            log.info(pokedexTxt + ": Pokemon name '" + pokemonName + "' and simple pokemon name '" + pokemonNameSimple + "' does not match");
@@ -459,9 +459,7 @@ public class PokemonComPage {
         String styledSelectTagName = wait.until(ExpectedConditions.visibilityOf(weStyledSelect))
                 .getTagName()
                 .trim();
-//        log.debug("Tag of styled selected webElement, styledSelectTagName = " + styledSelectTagName);
         int numberOfDivInForme = driver.findElements(By.xpath("//section[contains(@class,'pokedex-pokemon-form')]//div")).size();
-//        log.debug("numberOfDivInForme = " + numberOfDivInForme);
         if (numberOfDivInForme == 2 && styledSelectTagName.equals("div")) {
             formesNamesList.add(pokemonName);
         } else if (styledSelectTagName.equals("label")) {
@@ -484,7 +482,6 @@ public class PokemonComPage {
             log.info("Number of div in forme = " + numberOfDivInForme + "; styledSelectTagName = " + styledSelectTagName);
             fail("Could not determine if it has formes");
         }
-//        log.info("formesNamesList = " + formesNamesList);
     }
 
     public String getPokemonName() {
@@ -513,8 +510,6 @@ public class PokemonComPage {
         }
         wePokedexPokemonPaginationTitle.click();
         if (formesNamesList.size() == 1) {
-//            log.info("formeName = " + formeName);
-//            log.info("pokemonName = " + pokemonName);
             if (formeName.equals(pokemonName)) {
 //                log.debug("Form name and pokemon name matches");
             } else {
@@ -525,10 +520,8 @@ public class PokemonComPage {
             if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
 //                log.debug("Current form name is already selected");
             } else {
-//                log.debug("Number of formes = " + formesNamesList.size());
                 for (int i = 0; i < formesNamesList.size(); i++) {
                     if (formeName.equals(formesNamesList.get(i))) {
-//                        log.debug("forme name " + formeName + " found.");
                         try {
                             wePokedexPokemonPaginationTitle.click();
                             sleepMillis(500);
@@ -547,7 +540,6 @@ public class PokemonComPage {
                         // Do Nothing, check next one
                     }
                 }
-//                log.debug("Current selected forme label = " + weCurrentFormeLabel.getText().trim());
                 if (formeName.equals(weCurrentFormeLabel.getText().trim())) {
                     // Do Nothing
                 } else {
@@ -561,7 +553,7 @@ public class PokemonComPage {
         wait.until(ExpectedConditions.visibilityOfAllElements(welVersionsList));
         wait.until(ExpectedConditions.visibilityOf(weVersionX));
         wait.until(ExpectedConditions.visibilityOf(weVersionY));
-        assertEquals(pokedexTxt + ": There should be two version X and Y", welVersionsList.size(), 2);
+        assertEquals(pokedexTxt + ": There should be two version X and Y", 2, welVersionsList.size());
         List<String> versions = new ArrayList<>();
         versions.add("Y");
         versions.add("X");
@@ -644,7 +636,6 @@ public class PokemonComPage {
             String abilityName = wait.until(ExpectedConditions.visibilityOf(ability))
                     .getText()
                     .trim();
-//            log.debug("ability name = " + abilityName);
             wait.until(ExpectedConditions.elementToBeClickable(ability))
                     .click();
             sleepMillis(500);
@@ -653,13 +644,11 @@ public class PokemonComPage {
                     .getText()
                     .trim();
 
-//            log.debug("ability heading = " + abilityHeading);
             assertEquals(pokedexTxt + ": Ability name should be equal to ability heading", abilityName, abilityHeading);
 
             String abilityInfo = wait.until(ExpectedConditions.visibilityOf(weAbilityDescription))
                     .getText()
                     .trim();
-//            log.debug("ability info = " + abilityInfo);
             pokemonAbilitiesAndDescriptions.put(abilityName, abilityInfo);
 
             wait.until(ExpectedConditions.visibilityOf(buttonClose))
@@ -711,42 +700,56 @@ public class PokemonComPage {
         evolutionBranches.clear();
         String evolutionClass = findEvolutionClass();
         actions.moveToElement(wePokedexPokemonEvolution);
+
+        /*
+        log.info(pokedexTxt + " : evolution First : " + getTexts(weEvolutionFirstList) + " = " + weEvolutionFirstList.size());
+        if (weEvolutionMiddleList != null) {
+            log.info(pokedexTxt + " : evolution Middle : " + getTexts(weEvolutionMiddleList) + " = " + weEvolutionMiddleList.size());
+        } else {
+            log.info(pokedexTxt + " : evolution Middle : null");
+        }
+        log.info(pokedexTxt + " : evolution Last : " + getTexts(weEvolutionLastList) + " = " + weEvolutionLastList.size());
+        log.info(pokedexTxt + " : evolution All : " + getTexts(welAllEvolutionsList) + " = " + welAllEvolutionsList.size());
+        */
+
         switch (evolutionClass) {
             case "evolution-one":
-                assertEquals(weEvolutionFirstList.size(), 1);
-//                assertEquals(weEvolutionMiddleList.size(), 0);
-//                assertEquals(weEvolutionLastList.size(), 0);
-                assertEquals(welAllEvolutionsList.size(), 1);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
+//                assertEquals("There should be 0 from evolution last list ", 0, weEvolutionLastList.size());
+                assertEquals("There should be 1 from evolution all list ", 1, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionFirstList.get(0)));
                 break;
             case "evolution-two":
-                assertEquals(weEvolutionFirstList.size(), 1);
-//                assertEquals(weEvolutionMiddleList.size(), 0);
-                assertEquals(weEvolutionLastList.size(), 1);
-                assertEquals(welAllEvolutionsList.size(), 2);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
+                assertEquals("There should be 1 from evolution last list ", 1, weEvolutionLastList.size());
+                assertEquals("There should be 2 from evolution all list ", 2, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
                 break;
             case "evolution-three":
-                assertEquals(weEvolutionFirstList.size(), 1);
-                assertEquals(weEvolutionMiddleList.size(), 1);
-                assertEquals(weEvolutionLastList.size(), 1);
-                assertEquals(welAllEvolutionsList.size(), 3);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+                assertEquals("There should be 1 from evolution middle list ", 1, weEvolutionMiddleList.size());
+                assertEquals("There should be 1 from evolution last list ", 1, weEvolutionLastList.size());
+                assertEquals("There should be 3 from evolution all list ", 3, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
                 break;
             case "evolution-four":
+                log.info(pokedex + ": Inside evolution-four");
                 if (pokedex == 412 || pokedex == 413 || pokedex == 414) {
-                    assertEquals(weEvolutionFirstList.size(), 1);
-//                assertEquals(weEvolutionMiddleList.size(), 0);
-                    assertEquals(weEvolutionLastList.size(), 4);
-                    assertEquals(welAllEvolutionsList.size(), 5);
+                    assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+//                    assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
+                    assertEquals("There should be 4 from evolution last list ", 4, weEvolutionLastList.size());
+                    assertEquals("There should be 5 from evolution all list ", 5, welAllEvolutionsList.size());
                     evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
-                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(4)));
+                    evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(3)));
                 } else {
-                    assertEquals(weEvolutionFirstList.size(), 1);
-//                assertEquals(weEvolutionMiddleList.size(), 0);
-                    assertEquals(weEvolutionLastList.size(), 8);
-                    assertEquals(welAllEvolutionsList.size(), 9);
+                    log.info(pokedex + ": Inside else pokedex " + pokedex);
+                    assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+//                    assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
+                    assertEquals("There should be 8 from evolution last list ", 8, weEvolutionLastList.size());
+                    assertEquals("There should be 9 from evolution all list ", 9, welAllEvolutionsList.size());
                     evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
                     evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
                     evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
@@ -758,37 +761,37 @@ public class PokemonComPage {
                 }
                 break;
             case "evolution-five":
-                assertEquals(weEvolutionFirstList.size(), 1);
-                assertEquals(weEvolutionMiddleList.size(), 2);
-                assertEquals(weEvolutionLastList.size(), 2);
-                assertEquals(welAllEvolutionsList.size(), 5);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+                assertEquals("There should be 2 from evolution middle list ", 2, weEvolutionMiddleList.size());
+                assertEquals("There should be 2 from evolution last list ", 2, weEvolutionLastList.size());
+                assertEquals("There should be 5 from evolution all list ", 5, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(1)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(1), weEvolutionLastList.get(1)));
                 break;
             case "evolution-six":
-                assertEquals(weEvolutionFirstList.size(), 1);
-                assertEquals(weEvolutionMiddleList.size(), 1);
-                assertEquals(weEvolutionLastList.size(), 2);
-                assertEquals(welAllEvolutionsList.size(), 4);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+                assertEquals("There should be 1 from evolution middle list ", 1, weEvolutionMiddleList.size());
+                assertEquals("There should be 2 from evolution last list ", 2, weEvolutionLastList.size());
+                assertEquals("There should be 4 from evolution all list ", 4, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionMiddleList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionMiddleList.get(0), weEvolutionLastList.get(1)));
                 break;
             case "evolution-seven":
-                assertEquals(weEvolutionFirstList.size(), 1);
-//                assertEquals(weEvolutionMiddleList.size(), 0);
-                assertEquals(weEvolutionLastList.size(), 2);
-                assertEquals(welAllEvolutionsList.size(), 3);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
+                assertEquals("There should be 2 from evolution last list ", 2, weEvolutionLastList.size());
+                assertEquals("There should be 3 from evolution all list ", 3, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
                 break;
             case "evolution-eight":
-                assertEquals(weEvolutionFirstList.size(), 1);
-//                assertEquals(weEvolutionMiddleList.size(), 0);
-                assertEquals(weEvolutionLastList.size(), 3);
-                assertEquals(welAllEvolutionsList.size(), 4);
+                assertEquals("There should be 1 from evolution first list ", 1, weEvolutionFirstList.size());
+//                assertEquals("There should be 0 from evolution middle list ", 0, weEvolutionMiddleList.size());
+                assertEquals("There should be 3 from evolution last list ", 3, weEvolutionLastList.size());
+                assertEquals("There should be 4 from evolution all list ", 4, welAllEvolutionsList.size());
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(0)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(1)));
                 evolutionBranches.add(getEvolutionBranch(weEvolutionFirstList.get(0), weEvolutionLastList.get(2)));
@@ -798,9 +801,17 @@ public class PokemonComPage {
     }
 
     public String getEvolutionBranch(WebElement evolutionFrom, WebElement evolutionTo) {
-        return evolutionFrom.getText().replace("#", "").trim()
-                + "_" +
-                evolutionTo.getText().replace("#", "").trim();
+        String evolutionFromPokedex = evolutionFrom.getText().replaceAll("#", "").trim();
+        String evolutionToPokedex = evolutionTo.getText().replaceAll("#", "").trim();
+        String result = evolutionFromPokedex + "_" + evolutionToPokedex;
+        return result;
     }
 
+    public List<String> getTexts(List<WebElement> elementList) {
+        List<String> result = new ArrayList<>();
+        for (WebElement element : elementList) {
+            result.add(element.getText().trim());
+        }
+        return result;
+    }
 }

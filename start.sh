@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
-netstat -vanp tcp | grep 8081
-sudo lsof -i tcp:8081
+# netstat -vanp tcp | grep 8081
+# lsof -i tcp:8081
 # kill -9 <PID>
 
 sortUnique(){
-    echo "${1}"
-    src/main/sh/sortUniqueProperties.sh "${1}"
+    for f in $(find ./src/main/data/PokemonCom -name *.txt -o -name *.properties | sort); do
+        echo "${f}"
+        src/main/sh/sortUniqueProperties.sh "${f}"
+    done
 }
 
-for f in $( find ./src/main/data/PokemonCom -name *.txt -o -name *.properties | sort); do
-    sortUnique "${f}"
-done
+sortUnique
 
-#./gradlew clean build
-./gradlew clean test --tests "com.caliyeti.PokemonComTest"
+./gradlew clean build
+#./gradlew clean test --tests "com.caliyeti.PokemonComTest"
 
-for f in $( find ./src/main/data/PokemonCom -name *.txt -o -name *.properties | sort); do
-    sortUnique "${f}"
-done
+cat log.log | grep "Pokemon name and" | sed "s/.*PokemonComTest - //g" >> src/main/data/PokemonCom/log.txt
+
+sortUnique
 
 open build/reports/tests/test/index.html
