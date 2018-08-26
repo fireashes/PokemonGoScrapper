@@ -710,7 +710,6 @@ public class PokemonComPage extends PokemonPage {
                 evolutionBranches.add(getEvolutionBranch(welEvolutionMiddleList.get(0), welEvolutionLastList.get(0)));
                 break;
             case "evolution-four":
-                log.info(pokedex + ": Inside evolution-four");
                 if (pokedex == 412 || pokedex == 413 || pokedex == 414) {
                     assertEquals("There should be 1 from evolution first list ", 1, welEvolutionFirstList.size());
 //                    assertEquals("There should be 0 from evolution middle list ", 0, welEvolutionMiddleList.size());

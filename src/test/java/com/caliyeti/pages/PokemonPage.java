@@ -4,6 +4,7 @@ import com.caliyeti.model.Pokemon;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ public class PokemonPage {
         } catch (InterruptedException e) {
             fail(e.getMessage());
         }
+    }
+
+    public PokemonPage load(String baseurl) {
+        return this;
     }
 
 }
